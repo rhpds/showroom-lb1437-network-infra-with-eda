@@ -2,6 +2,7 @@
 
 With the pieces all in place, and the necessary information gathered, we can now start to put it all together.
 
+[#ios]
 == IOS configuration
 
 In your student workbench, under ansible-cisco-telemetry/playbooks, take a look at the playbook configure_ios_telemetry.yml.
@@ -41,6 +42,7 @@ In your code-server workbench, go to File > New File... and type "`bgp.json`" in
 
 We'll need to choose something in this message to use to detect a bad BGP state. Nested under the "`fields`" key, there is a "`session_state`" key set to "`fsm-idle`" which under normal circumstances should say "`fsm-established`". So, let's make a note for later that we are interested in "`fields.session_state`".
 
+[#rulebook]
 == Using ansible-rulebook
 
 In your student workbench, open the file rulebooks/bgp_status_cli.yml.

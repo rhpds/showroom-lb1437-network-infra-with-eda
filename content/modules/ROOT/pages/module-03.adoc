@@ -2,6 +2,7 @@
 
 Our goal will be to have our routers able to self-report when BGP has broken, as we simulated in the last section. We'll need to install some software to help us bridge the gap between the routers and Ansible.
 
+[#yang]
 == YANG Suite
 
 YANG Suite is a free and open-source tool, created and published by Cisco, that can help you explore YANG models. YANG is a way to programmatically represent all the capabilities of a network device, and we'll need to read a YANG model to figure out how to configure telemetry on our routers. However, YANG models are not very human-readable, which is where YANG Suite will come in handy.
@@ -75,6 +76,7 @@ You should be seeing:
 
 You can load as many YANG models and view as many nodes as you'd like using this method. For now, we have what we need, so we'll move on from YANG Suite.
 
+[#telegraf]
 == Telegraf and Kafka
 
 We will be using a Validated Content Collection in this section. +

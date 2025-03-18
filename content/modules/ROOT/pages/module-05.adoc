@@ -2,6 +2,7 @@
 
 With everything built and working on the command line, let's move our workload into Ansible Automation Platform.
 
+[#controller]
 == Configuring Automation Controller
 
 Back in Exercise 1.1 we had two links from the student assignment, one for VS Code and another for Automation Controller. Now we will click the Automation Controller link and login with the information listed under the link.
@@ -60,6 +61,7 @@ You'll be prompted for variables (if not, double check your template has the rig
 
 After about a minute (you will be waiting for the Execution Environment image to pull since this is a new AAP environment), the playbook runs, and it should look just like the other times we ran this same playbook on the command line. It should still come back with all "`ok`" task outputs. The difference now is that we have access to enterprise features like role-based access control, automatic logging, push-button execution, and API-based job launches, among others.
 
+[#eda]
 == Configuring Event-Driven Ansible Controller
 
 Now that we have the AAP equivalent of applying our BGP configuration on the command line, we need to work on building the AAP equivalent of the ansible-rulebook command we were running in Exercise 4.2.

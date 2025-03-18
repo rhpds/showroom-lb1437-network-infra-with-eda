@@ -1,7 +1,21 @@
-* xref:module-01.adoc[1. RPM Native Container]
-** xref:module-01.adoc#repositories[Repositories]
-** xref:module-01.adoc#software[Software]
+* xref:module-01.adoc[1. Lab Setup]
+** xref:module-01.adoc#codeserver[Accessing code-server]
+** xref:module-01.adoc#connect[Router connectivity and existing configurations]
 
-* xref:module-02.adoc[2. GitHub Sourced Container]
-** xref:module-02.adoc#prerequisites[Install Prerequisites]
-** xref:module-02.adoc#container[Enable Container]
+* xref:module-02.adoc[2. Explore environment and BGP configuration]
+** xref:module-02.adoc#baseline[Applying baseline configuration]
+** xref:module-02.adoc#recover[Recovering from a misconfiguration]
+
+* xref:module-03.adoc[3. Establish the supporting software stack]
+** xref:module-03.adoc#yang[YANG Suite]
+** xref:module-03.adoc#telegraf[Telegraf and Kafka]
+
+* xref:module-04.adoc[4. Implement Event-Driven Ansible]
+** xref:module-04.adoc#ios[IOS configuration]
+** xref:module-04.adoc#rulebook[Using ansible-rulebook]
+
+* xref:module-05.adoc[5. Ansible Automation Platform]
+** xref:module-05.adoc#controller[Configuring Automation Controller]
+** xref:module-05.adoc#eda[Configuring Event-Driven Ansible Controller]
+
+* xref:module-06.adoc[6. Extend the scope]

@@ -1,5 +1,6 @@
 = Lab Setup
 
+[#codeserver]
 == Accessing code-server
 
 When you get assigned your student workbench, you will have a couple links available to you. For now, we are only interested in the “VS Code access” section, similar to what’s shown below:
@@ -20,6 +21,7 @@ image::1_code-server.png[code-server]
 
 You may want to utilize your browser’s zoom function at this point to be able to see the text more clearly.
 
+[#connect]
 == Router connectivity and existing configurations
 
 In your terminal, test that you can SSH to rtr1 and rtr2. While logged in, find out the IOS-XE version being used and view their BGP configurations (commands to do that are provided below). You should not be prompted for a password as SSH keys have been set up ahead of time.

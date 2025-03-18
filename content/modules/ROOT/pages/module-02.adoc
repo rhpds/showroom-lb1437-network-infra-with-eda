@@ -21,6 +21,7 @@ This is a playbook that applies a baseline BGP configuration to a Cisco IOS(-XE)
 
 This playbook and its resource data represent an *Infrastructure as Code* approach to managing the BGP configuration on our two routers. This will be our *source of truth* for this lab's network configuration. In other words, we want to treat this code as the definitive answer to what the router configurations should be, regardless of what's currently applied to the device.
 
+[#baseline]
 == Applying baseline configuration
 
 Let's run this playbook a couple of times.
@@ -46,6 +47,7 @@ Run the playbook again and drop the verbosity:
 
 This time all the tasks report "`ok`". This means that our live configuration still matches our source of truth. It also means that the playbook is *idempotent*, meaning that we can run this playbook as many times as we want without applying any change, as long as the configuration stays correct.
 
+[#recover]
 == Recovering from a misconfiguration
 
 Time to break things. Let's start by logging into rtr1 over SSH. Run the command:
