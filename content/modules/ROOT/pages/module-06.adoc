@@ -1,0 +1,11 @@
+= Extend the scope
+
+There are no instructions for this exercise. You now have a working telemetry lab where you can try out any ideas you have for things you'd like to do in your own environment.
+
+Here are some ideas:
+
+* There are two other routers in the environment, rtr3 and rtr4. Try involving those.
+* These routers are also configured to use OSPF. Try monitoring for OSPF changes. Refer to the lab topology diagram.
+* A good use case for switches is to monitor whether a port is supposed to be shutdown or not. You can mimic that on these routers by using Loopback interfaces.
+
+Have fun!

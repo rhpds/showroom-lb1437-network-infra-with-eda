@@ -1,0 +1,144 @@
+= Establish the supporting software stack
+
+Our goal will be to have our routers able to self-report when BGP has broken, as we simulated in the last section. We'll need to install some software to help us bridge the gap between the routers and Ansible.
+
+== YANG Suite
+
+YANG Suite is a free and open-source tool, created and published by Cisco, that can help you explore YANG models. YANG is a way to programmatically represent all the capabilities of a network device, and we'll need to read a YANG model to figure out how to configure telemetry on our routers. However, YANG models are not very human-readable, which is where YANG Suite will come in handy.
+
+Exit out of any SSH sessions you are still in, and become root on your student workbench.
+
+sudo -i
+
+Run the following command:
+
+podman run -d --name yangsuite -p 8088:8480 http://quay.io/zachp/yangsuite[quay.io/zachp/yangsuite]
+
+This is a YANG Suite image, pre-built in the interest of time, that will run in Podman.
+
+For informational purposes, YANG Suite is on GitHub at https://github.com/CiscoDevNet/yangsuite and the image we are using was built from https://github.com/CiscoDevNet/yangsuite/blob/main/one-container-alternative/Dockerfile[this Dockerfile].
+
+To access YANG suite, you will need to open a new browser tab (*Firefox is recommended*) and access your student workbench at port 8088 (instead of port 8123 which is hosting your code-server).
+
+So, for example, if your code-server tab is showing: https://student1.86ctn.example.opentlc.com:8123/?folder=/home/student +
+Then, you'll access YANG suite at: https://student1.86ctn.example.opentlc.com:8088/
+
+Don't use the actual links above; they are examples.
+
+You will need to accept the self-signed HTTPS certificate. When you get in, you'll be asked to accept the EULA. The username and password are both *developer*.
+
+YANG Suite doesn't come with any models loaded, so let's add some. In the left hand navigation, expand Setup and click "`YANG files and repositories`".
+
+image::2_yangnav.png[YANG nav]
+
+Click on the "`New repository`" button. When prompted, call your new repository "`iosxe`".
+
+In the middle section that follows, labeled "`Add modules to repository`", choose "`Git`" from the 4 options (Upload, NETCONF, SCP, Git) and fill in the following information:
+
+|===
+| Repository URL | https://github.com/YangModels/yang.git
+
+| Git branch
+| main
+
+| Directory within repository
+| vendor/cisco/xe/17141
+
+| Include subdirectories
+| Unchecked
+|===
+
+We discovered back in Exercise 1.2 that the IOS-XE version in use is 17.14.1a, which is how we arrived at the value for "Directory within repository`". You can browse the repository at https://github.com/YangModels/yang to see what else is available from this source.
+
+Click on the "`Import YANG files`" button. The import takes some time and you can watch the progress at the top of the screen. When finished, a message will appear similar to below.
+
+image::3_yangadd.png[YANG add]
+
+Next, in the left hand navigation, as before expand Setup and click "`YANG module sets`". Click on the "`New YANG set`" button. You can call the new set "`ansible`" when prompted.
+
+In the resulting screen, in the middle, click the button "`Add entire repository`". You can ignore messages about missing dependencies.
+
+Next, in the left hand navigation, expand Explore and click YANG.
+
+At the top of the page, where it says "`Select a YANG set`" choose the "`ansible`" set you just made. You will now have a box to the right where you can search through your available models. Type "`bgp`" into the search box. In the results that appear, click on "`Cisco-IOS-XE-bgp-oper`", then click the "`Load module(s)`" button on the right.
+
+The bgp-oper model loads below. You will need to expand it by clicking the small triangle to the left of "`Cisco-IOS-XE-bgp-oper`". It should look like:
+
+image::4_yangbgp.png[YANG BGP]
+
+The plan is to detect the issue we caused in Exercise 2.2, which was a neighbor state problem. So, we can click on "`neighbors`" under "`bgp-state-data`". On the right, some data about this YANG node appears. We want to take down two pieces of data: the *prefix* and the *xpath*.
+
+You should be seeing:
+
+* *Prefix:* bgp-ios-xe-oper
+* *Xpath:* /bgp-state-data/neighbors
+
+You can load as many YANG models and view as many nodes as you'd like using this method. For now, we have what we need, so we'll move on from YANG Suite.
+
+== Telegraf and Kafka
+
+We will be using a Validated Content Collection in this section. +
+From the support article about Validated Content: https://access.redhat.com/support/articles/ansible-automation-platform-certified-content
+
+Ansible validated content is a new set of collections containing pre-built YAML content (such as playbooks or roles) to address the most common automation use cases. You can use Ansible validated content out-of-the-box or as a learning opportunity to develop your skills. It's a trusted starting point to bootstrap your automation: use it, customize it, and learn from it.
+
+We'll be using the validated *network.telemetry* collection to install a Telegraf/Kafka stack in containers, that will translate the telemetry messages coming from the Cisco device and make them consumable by Event-Driven Ansible.
+
+The playbook to do this has been provided for you. In your student workbench, inside the `ansible-cisco-telemetry/playbooks` directory, click on `install_telemetry_stack.yml` and take a look at what it does. You can see that it's using a single role, `network.telemetry.run`, with a couple variables specifying what we want the role to do.
+
+This is a major reason to check out Validated Content - in this situation, we have an easy way to do something complex (in this case, deploy two applications, which will communicate with each other, in containers).
+
+In the terminal, if you are still root, exit back to the student user. If you are in any directory other than ansible-cisco-telemetry, cd back to there. Then go ahead and run this playbook:
+
+ansible-playbook playbooks/install_telemetry_stack.yml -i inventory
+
+Observing the output, we can see that we've deployed something in Docker. Let's look at what's running in Docker:
+
+`sudo docker ps`
+
+You should get output that looks like this:
+
+`CONTAINER ID   IMAGE                             COMMAND                  CREATED          STATUS          PORTS                                                                         NAMES` +
+`+a16e056d6d15   telegraf:latest                   "/entrypoint.sh -con…"   17 seconds ago   Up 17 seconds   8092/udp, 8125/udp, 8094/tcp, 0.0.0.0:8089->57000/tcp, [::]:8089->57000/tcp   telegraf+` +
+`+bd3888848d03   confluentinc/cp-kafka:7.3.2       "/etc/confluent/dock…"   7 minutes ago    Up 7 minutes    0.0.0.0:9092->9092/tcp, [::]:9092->9092/tcp                                   broker+` +
+`6ab3f6677c82   confluentinc/cp-zookeeper:7.3.2   "/etc/confluent/dock…"   7 minutes ago    Up 7 minutes    2181/tcp, 2888/tcp, 3888/tcp                                                  zookeeper`
+
+On the line for Telegraf, we can see `+0.0.0.0:8089->57000/tcp+` which means that we have port 57000 inside the Telegraf container mapped to port 8089 outside of the container.
+
+Similarly, on the line for Kafka we can see `+0.0.0.0:9092->9092/tcp+` which means that we have port 9092 inside the Kafka container mapped to the same port 9092 outside of the container.
+
+The playbook also added some Telegraf configuration that we can look at. In your student workbench, in the file tree on the left, you should now have a "`telegraf`" directory that wasn't there before.
+
+The telegraf directory has a telegraf.conf file inside of it. This is mounted to the Telegraf container. Let's look at the telegraf.conf file by clicking on it.
+
+Telegraf is a piece of software that takes inputs in one format and outputs them in another, so that's what we're going to be looking for in the configuration file.
+
+In particular, observe this section:
+
+`[[inputs.cisco_telemetry_mdt]]` +
+`transport = "grpc"` +
+`service_address = ":57000"`
+
+Telegraf comes with an input plugin that understands Cisco telemetry messages and it's listening on port 57000, which we know from the Docker output is port 8089 on the outside.
+
+We can also look at this section:
+
+`[outputs.kafka]` +
+`# URLs of kafka brokers` +
+`brokers = ["broker:29092"]` +
+`topic = "eda"` +
+`data_format = "json"`
+
+Again from the Docker output we know that we can access Kafka on port 9092 from the outside but we also see here that Telegraf will use a different port (29092) to output to it. We can ignore that detail in this situation; what's important is we know that the telemetry messages received by Telegraf will be outputted to Kafka on a topic called "`eda`".
+
+Let's get a dedicated Kafka terminal up. listening for any messages coming in on this "`eda`" topic. In your student workbench, at the top of the terminal, you have a + button. Click it, and you should have a new bash terminal come up. You can swap between them on the right. It may be helpful to right-click on your new second terminal, choose Rename, and call it "`kafka`" since that is all we'll use it for.
+
+In your new terminal, run:
+
+`sudo docker exec -it broker kafka-console-consumer --bootstrap-server localhost:9092 --topic eda`
+
+You should get some warnings like:
+
+`[2025-03-05 22:54:56,148] WARN [Consumer clientId=console-consumer, groupId=console-consumer-14849] Error while fetching metadata with correlation id 2 : {eda=LEADER_NOT_AVAILABLE} (org.apache.kafka.clients.NetworkClient)`
+
+The LEADER_NOT_AVAILABLE message means that no messages have been received on this topic, but we are successfully talking to Kafka regardless, which is what we expect at this stage. Leave this terminal open and switch back to your first/original terminal.

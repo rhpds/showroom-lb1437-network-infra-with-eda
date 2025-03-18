@@ -1,0 +1,70 @@
+= Implement Event-Driven Ansible
+
+With the pieces all in place, and the necessary information gathered, we can now start to put it all together.
+
+== IOS configuration
+
+In your student workbench, under ansible-cisco-telemetry/playbooks, take a look at the playbook configure_ios_telemetry.yml.
+
+This playbook will have the job of configuring all our Cisco devices to send telemetry messages to Telegraf. There are several things to look at here.
+
+* The hosts line: As before, we are working with two devices, rtr1 and rtr2.
+* The vars block: Our inputs for the playbook
+ ** telemetry_grpc_port - We know from Exercise 3.2 that Telegraf is listening on port *8089*.
+ ** telemetry_nodes - We know from Exercise 3.1 that the YANG node we want to listen for has prefix *bgp-ios-xe-oper* and xpath *bgp-state-data/neighbors*.
+* The first task: Enables the use of YANG on the device.
+* The second task: Creates push subscriptions to all the YANG nodes described in the telemetry_nodes variable.
+
+Go ahead and run the playbook:
+
+ansible-navigator run playbooks/configure_ios_telemetry.yml
+
+In your first terminal, ssh to rtr1. First we'll verify that the telemetry configuration is looking good:
+
+`show telemetry ietf subscription 1`
+
+You may initially see a "`Schema currently not available`" message if you were quick, but eventually we should see this output:
+
+`ID         Type       State      State Description` +
+`1          Configured Valid      Subscription validated`
+
+Let's repeat the BGP break that we did in Exercise 2.2.
+
+`configure terminal` +
+`router bgp 65000` +
+`neighbor 10.200.200.2 remote-as 65009` +
+`end`
+
+Now swap back to your Kafka terminal. We should see some long JSON messages appearing, describing the state of our routers`' BGP neighbors. These messages appear as a big block with a blank line between them. Select one of the messages and copy it.
+
+In your code-server workbench, go to File > New File... and type "`bgp.json`" in the box. Hit Enter twice, then paste the message we copied into the new blank file that opens. It initially pastes as a single line. Right click anywhere in the line and choose "`Format Document`". This will allow us to read through the message (you may have to scroll left).
+
+We'll need to choose something in this message to use to detect a bad BGP state. Nested under the "`fields`" key, there is a "`session_state`" key set to "`fsm-idle`" which under normal circumstances should say "`fsm-established`". So, let's make a note for later that we are interested in "`fields.session_state`".
+
+== Using ansible-rulebook
+
+In your student workbench, open the file rulebooks/bgp_status_cli.yml.
+
+This is a *rulebook* which is the mechanism for controlling Event-Driven Ansible, the same way a playbook controls regular Ansible.
+
+* We have a Kafka source available on port 9092, which we know from Exercice 3.2. We can get access to that in EDA by using the ansible.eda.kafka *event source plugin*.
+* We have a single rule
+ ** The condition looks for event.body.fields.session_state to be anything other than "`fsm-established`" which we explored in the previous exercise.
+ ** The response to this condition is to run the BGP configuration playbook - the same one we ran in Exercise 2.2 to manually recover from a misconfiguration.
+
+While you're here, also take a look at bgp_status_aap.yml. We aren't going to use it now, but we will later. Note the difference between the two at the very end under "`action`".
+
+Go into your first/original terminal (not the Kafka one) and exit out of any SSH sessions you were in. Run the following command:
+
+ansible-rulebook --rulebook rulebooks/bgp_status_cli.yml -i inventory
+
+You will need to wait up to 30 seconds for the next BGP message to come in, but once it does, you should see the playbook run. When it runs, you should observe a couple things:
+
+* The task that applies BGP configuration has reported "`changed`"
+* The playbook has only run against rtr1. Recall from Exercise 2.1 there was an ansible_eda variable in the hosts line we were not yet using; now we are.
+
+Press CTRL+C to stop ansible-rulebook. SSH to rtr1 and verify that BGP is fixed:
+
+`show ip bgp summary`
+
+If desired, try to break things in a similar way on rtr2 and verify that everything works the same way there (note that the neighbor line to change will be different).

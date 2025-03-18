@@ -1,0 +1,112 @@
+= Ansible Automation Platform
+
+With everything built and working on the command line, let's move our workload into Ansible Automation Platform.
+
+== Configuring Automation Controller
+
+Back in Exercise 1.1 we had two links from the student assignment, one for VS Code and another for Automation Controller. Now we will click the Automation Controller link and login with the information listed under the link.
+
+You are looking for something that looks like this:
+
+image::5_controller.png[Controller]
+
+(you own information will be different)
+
+Once logged in, in the left side navigation, expand "`Automation Execution`" and click on "`Templates`". Click on the blue "`Create template`" button and choose "`Create job template`".
+
+image::6_templates.png[Templates]
+
+Fill out the form with the information below:
+
+|===
+| Name | BGP configuration |
+
+| *Organization*
+| Default
+|
+
+| *Inventory*
+| Workshop Inventory
+|
+
+| *Project*
+| Cisco Telemetry
+|
+
+| *Playbook*
+| playbooks/configure_ios_bgp.yml
+|
+
+| *Credentials*
+| Workshop Credential
+| Machine
+
+| *Execution environment*
+| network workshop execution environment
+|
+
+| *Extra variables*
+| Check "`Prompt on launch`" box
+|
+|===
+
+When this information is entered, click the "`Save job template`" button.
+
+At the top of the screen, click on the "`Launch template`" button.
+
+image::7_launch.png[Launch]
+
+You'll be prompted for variables (if not, double check your template has the right box checked). Don't enter anything and just click Next, then Finish.
+
+After about a minute (you will be waiting for the Execution Environment image to pull since this is a new AAP environment), the playbook runs, and it should look just like the other times we ran this same playbook on the command line. It should still come back with all "`ok`" task outputs. The difference now is that we have access to enterprise features like role-based access control, automatic logging, push-button execution, and API-based job launches, among others.
+
+== Configuring Event-Driven Ansible Controller
+
+Now that we have the AAP equivalent of applying our BGP configuration on the command line, we need to work on building the AAP equivalent of the ansible-rulebook command we were running in Exercise 4.2.
+
+In the left side navigation, under Automation Decisions, click on Rulebook Activations. You shouldn't have any activations yet, so click on the blue "`Create rulebook activation`" button.
+
+Similar to what you did for the Job Template, fill out the form with the information below:
+
+|===
+| Name | BGP status
+
+| *Organization*
+| Default
+
+| *Project*
+| Cisco Telemetry
+
+| *Rulebook*
+| bgp_status_aap.yml
+
+| *Credentials*
+| Automation Controller
+
+| *Decision environment*
+| Quay DE
+|===
+
+Everything else can be left empty or default. Click the "`Create rulebook activation`" button.
+
+Two things to highlight here:
+
+* The rulebook bgp_status_aap.yml is the same as the rulebook bgp_status_cli.yml that you ran earlier on the command line with one key difference: The action is to kick off a Job Template (the one you just made). This is the reason why you need the "`Automation Controller`" credential.
+* We are using a Decision Environment, which is like an Execution Environment, but for use with Event-Driven Ansible.
+
+The Rulebook Activation will try to start. As before, with the new environment you'll need to wait for it to pull the Decision Environment image, but after about a minute you should see "`Activation status`" change to "`Running`". At the top of the screen, click on the "`History`" tab, then click on the "`1- BGP status`" link. Here is where we can see the ansible-rulebook log and verify that everything came up with no errors.
+
+As before, we want to break BGP to see it get fixed. Switch back to your code-server tab and ssh to rtr1 to do so. The commands again are:
+
+`configure terminal` +
+`router bgp 65000` +
+`neighbor 10.200.200.2 remote-as 65009` +
+`end`
+
+Switch back to your AAP tab. In the left side navigation, under Automation Decisions, click on Rule Audit. Depending on how quick you were, you'll either already see an entry on this page, or one will appear shortly. Once available, click on "`Re-apply BGP config when not established`" (which is the name of the rule in the rulebook).
+
+On the page that appears, click on the "`Events`" tab. There should be one entry for ansible.eda.kafka. Click on it. The event details pop up, and we can see that we have the same data available to us as we did in Exercise 4.1. Click the "`Close`" button.
+
+Click on the "`Actions`" tab. We can see a single entry "`run_job_template`". If you click on that link, it will show you the job results in a new tab. You should see that the "`Apply BGP Global config`" task reports "`changed`" just as it did before on the CLI.
+
+You now have AAP running the same Event-Driven workload as we developed on the command line.

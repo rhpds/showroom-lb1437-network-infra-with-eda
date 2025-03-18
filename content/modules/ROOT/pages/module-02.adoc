@@ -1,138 +1,100 @@
-= Managing an Application from GitHub
+= Explore environment and BGP configuration
 
-In the first half of this workshop, we packaged an application into this portable container format manually using rpms.
-In the second half, we will consider that you may want to manage software from GitHub or some kind of software versioning application.
-Rather than installing rpms, we have individual software files and pull them out of that version control into a group of systems.
+First, let's get familiar with what Network Resource Modules are, which differ from other module designs you may have worked with in Ansible. +
+From the docs page at: https://docs.ansible.com/ansible/latest/network/user_guide/network_resource_modules.html
 
-== Install RHEL 8 UBI
+Ansible network resource modules simplify and standardize how you manage different network devices. Network devices separate configuration into sections (such as interfaces and VLANs) that apply to a network service. Ansible network resource modules take advantage of this to allow you to configure subsections or _resources_ within the network device configuration. Network resource modules provide a consistent experience across different network devices.
 
-In this lab, we will be using a different Red Hat Enterprise Linux version in my container. 
+In the file tree on the left side of your VSCode environment, expand the ansible-cisco-telemetry folder, expand the playbooks folder under that, then click on configure_ios_bgp.yml to open it.
 
-. Verify the host system release 
+This is a playbook that applies a baseline BGP configuration to a Cisco IOS(-XE) router. Let's dig into a few things about this playbook:
 
-+
-[source,bash]
+* The hosts line
+ ** Later in the lab, Event-Driven Ansible (EDA) is going to identify which devices in our lab have had their configurations changed. We want to be able to only run remediation on devices that we know need it, which is what the `ansible_eda` variable is for.
+ ** We don't have EDA involved yet, so `ansible_eda` is not defined, and we'll therefore default to rtr1 and rtr2 for now.
+* The resource state
+ ** For the sake of this lab, we're using state `merged`, which is the least destructive state we can use, and is recommended for testing.
+ ** You can check out the document on Resource Modules linked above for a description of the available states and why you'd want to use each one. The `replaced` state, for example, would wipe out any configuration in the relevant subsection _not_ found in the resource data, which is helpful for drift control.
+* The resource data
+ ** The module inputs are very minimal, as they reference variable data. This data can be found under the `host_vars` directory.
+ ** Take a moment to look at the two files under host_vars and how they differ.
+
+This playbook and its resource data represent an *Infrastructure as Code* approach to managing the BGP configuration on our two routers. This will be our *source of truth* for this lab's network configuration. In other words, we want to treat this code as the definitive answer to what the router configurations should be, regardless of what's currently applied to the device.
+
+== Applying baseline configuration
+
+Let's run this playbook a couple of times.
+
+Before doing anything, change into the ansible-cisco-telemetry directory +
+`cd ~/ansible-cisco-telemetry`
+
+For our first run, use the following command: +
+`ansible-navigator run playbooks/configure_ios_bgp.yml -vv`
+
+We should see the first two tasks report "`ok`" - so nothing changed. But the in the last task's output, you should see something like below:
+
+[source,textinfo]
 ----
-cat /etc/redhat-release
-----
-+ 
-NOTE: The `bastion` system is Red Hat Enterprise Linux 9, and when you built the previous container, you used the UBI9 image. This means both the image and the container were built off the same Red Hat Enterprise Linux packages. 
-
-. As we did previously in this lab, Use `buildah from` to pull down the Red Hat Enterprise Linux 8 UBI.
-
-+
-[source,bash]
-----
-buildah from registry.access.redhat.com/ubi8/ubi
-----
-
-NOTE: Because you already pulled one image named `ubi-working-container` this one is called `ubi-working-container-1`. 
-
-[#prerequisites]
-== Install Prerequisites
-
-Now that you have a working container, you will use the same process as before installing all the prerequisites, changing config files, and manipulating the contents of this container to be in the desired state.
-
-The software you will install is a JavaScript-based game that runs on a web browser. As before in the lab, use dnf to install software inside the container. 
-
-. Use `buildah run` and install Apache (`httpd`) into the `ubi-working-container-1` container. 
-+
-[source,bash]
-----
-buildah run ubi-working-container-1 -- dnf -y install httpd
+changed: [rtr1] \=> {"after": {"as_number": "65000", "bgp": {"default": {"ipv4_unicast": true, "route_target": {"filter": true}}, "log_neighbor_changes": true, "router_id": {"address": "192.168.1.1"}}, "neighbors": [{"neighbor_address": "10.200.200.2", "remote_as": "65001"}]}, "before": {"as_number": "65000", "bgp": {"default": {"ipv4_unicast": true, "route_target": {"filter": true}}, "log_neighbor_changes": true, "router_id": {"address": "192.168.1.1"}}, "neighbors": [{"neighbor_address": "10.200.200.2", "remote_as": "65001"}]}, "changed": true, "commands": ["router bgp 65000", "timers bgp 5 15"]}
 ----
 
-== Enable Service
+Refer to the `commands` output at the end to see that the resource module was able to figure out which commands needed to be run to accomplish the configuration, even though our configuration data is stored as YAML. We were only missing the `timers` part - this is for the lab so that BGP can more quickly tell when something is wrong.
 
-The next thing to do is to use a systemctl to enable the service. The ubi-init provides full systemd service to the container.
-This will start up any of the services that are enabled. 
+Run the playbook again and drop the verbosity:
 
-. Enable the `httpd` service using `buildah run`
+`ansible-navigator run playbooks/configure_ios_bgp.yml`
 
-+
-[source,bash]
-----
-buildah run ubi-working-container-1 -- systemctl enable httpd
-----
+This time all the tasks report "`ok`". This means that our live configuration still matches our source of truth. It also means that the playbook is *idempotent*, meaning that we can run this playbook as many times as we want without applying any change, as long as the configuration stays correct.
 
-NOTE: The UBI standard image doesn't have systemd installed on it by default. The `ubi-init` container image does include systemd. Plan accordingly to which image you use to build applications.  
+== Recovering from a misconfiguration
 
-== Explore Source Materials
+Time to break things. Let's start by logging into rtr1 over SSH. Run the command:
 
-A GitHub repository has already been synchronized to `/home/devops/clumsy-bird/` This repository contains the configurations for your application.
+`show ip bgp summary`
 
-. Verify the repository is cloned inside the `/home/devops/` directory
-+
-[source,bash]
-----
-cd /home/devops/
-----
+Example output:
 
-+
-[source,bash]
-----
-git clone https://github.com/ellisonleao/clumsy-bird
-----
-+
-NOTE: The output states that the software has already been checked out. 
-+
-. Explore the JavaScript contents, index files, and everything else that we need for this web-based JavaScript software.
-+
-[source,bash,role=execute]
-----
-ls clumsy-bird
-----
+`[student@ansible-1 ansible-cisco-telemetry]$ ssh rtr1`
 
-== Add Source Materials to Container
+`rtr1#show ip bgp summary` +
+`BGP router identifier 192.168.1.1, local AS number 65000` +
+`+[...]+`
 
-. Now that you have verified the source materials exist, you will put the software inside of my container image using the `buildah copy` command.
-+
-[source,bash]
-----
-buildah copy ubi-working-container-1 clumsy-bird /var/www/html
-----
+`Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd` +
+`10.200.200.2    4        65001     332     331        8    0    0 04:58:18        4`
 
-[#container]
-== Enable Container in Background
+This looks good, and we want to pay attention to the very last bit of data in the bottom right, "`State/PfxRcd`". The "`4`" that we see now is normal in this environment. Let's look to make it abnormal.
 
-In the previous section of this lab, you ran the game natively through interactive mode. Because you are now building a web application you will need to run the container in the background and access it through a web address. 
+Issue the following commands:
 
-. Execute `buildah config` to specify a port and initialize the container. 
+`configure terminal` +
+`router bgp 65000` +
+`neighbor 10.200.200.2 remote-as 65009` +
+`end`
 
-+
-[source,bash]
-----
-buildah config --port 80 --cmd "/usr/sbin/init" ubi-working-container-1
-----
+Example output:
 
-NOTE: The command makes a configuration change to this container. I'm configuring this container to accept connections to its port 80. When the container starts up, it should run the init command, which, in this case, is going to be the Apache daemon right from earlier when I enabled it.
+`rtr1#configure terminal` +
+`Enter configuration commands, one per line.  End with CNTL/Z.` +
+`rtr1(config)#router bgp 65000` +
+`rtr1(config-router)#neighbor 10.200.200.2 remote-as 65009` +
+`rtr1(config-router)#end` +
+`rtr1#`
 
-== Commit Container and Deploy
+We have just given our router the wrong AS number for its neighbor router. Run `show ip bgp summary` again and we should see bad things happening to our BGP state (note the incorrect AS number and state being listed as "`Closing`" or "`Idle`" depending on how long you gave it):
 
-. Now that we have a container in a working configured state, it is time to make that permanent by committing it to a container image called `clumsy-bird`
-+
-[source,bash]
-----
-buildah commit ubi-working-container-1 clumsy-bird
-----
+`Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd` +
+`10.200.200.2    4        65009       2       2        1    0    0 00:00:04 Closing`
 
-. Verify that the image was created with `podman`
-+
-[source,bash]
-----
-podman images
-----
-+
-. Run the container Now it's time to run the container. 
-+
-[source,bash]
-----
-podman run -d -p 8500:80 clumsy-bird
-----
+Now, exit your SSH session and re-run the playbook we were just running.
 
-== Verify Application
+`ansible-navigator run playbooks/configure_ios_bgp.yml`
 
-Verify that the application is running by navigating to
+We should get "`changed`" reported only on rtr1 and only on the BGP configuration task.
 
-http://bastion.{guid}.example.opentlc.com:8500
+SSH back into rtr1 and check the BGP state again.
 
+`ssh rtr1` +
+`show ip bgp summary`
+
+We should see that our state is back to the normal "`4`" output. This shows us that we can use this playbook to recover from misconfiguration issues.

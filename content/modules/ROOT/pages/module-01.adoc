@@ -1,149 +1,53 @@
-= Building an Application with rpms
+= Lab Setup
 
-== Downloading the UBI
+== Accessing code-server
 
-In this lab, you will be installing software into the container 
-image running as an interactive application. To do this you will
-need `yum`, but do not need `systemd` for managing services within the
-container environment.  For that reason, you will be using the *Standard*
-UBI image (as opposed to the Minimal or Multi-service images).
+When you get assigned your student workbench, you will have a couple links available to you. For now, we are only interested in the “VS Code access” section, similar to what’s shown below:
 
-Using the "buildah from" command will download and meld the container image. This particular image we are using is the Red Hat Universal Base Image or UBI. From the ourput of the command, you will notice that we are pulling down the latest one, which is for RHEL 9. 
+image::0_vscode.png[vscode]
 
-. Execute the  download the Standard UBI
-image from Red Hat's registry.
+NOTE: Please ignore any links at the top of the page to the exercises/deck as these are for a different workshop; we are just borrowing the lab setup from it.
 
-+
-[source,sh,role=execute]
-----
-buildah from registry.access.redhat.com/ubi9/ubi
-----
+Click on the WebUI link to access the VSCode environment. Once you are in:
 
-[#repositories]
-== Installing Repositories
-In this lab, you are going to containerize a software package that is already
-packaged in RPM format and stored in the Extra Packages for Enterprise Linux
-(EPEL) repository.
+1. Go to File > Open Folder… and choose /home/student (this should be filled in by default), click OK.  
+2. The page reloads. You can select “Yes, I trust the authors”.  
+3. Go to Terminal > New Terminal
 
-Software often has requirements for prerequisite software that must be installed
-on the machine for it to work properly.  `yum` will resolve those
-dependencies for you, as long as it can locate the required packages in
-repositories defined on the machine.  The Red Hat Universal Base Image (UBI)
-downloaded in the previous step has access to some Red Hat Enterprise Linux
-repositories.  However, the target package for the lab is from EPEL.  
+You should now have a screen that looks like this: 
 
-. In the command below, `buildah` is going to run a command on the
-`ubi-working-container` image.  The `--` indicates that the command should be
-executed from within the container, which means the results will be applied into
-the container image.  Lastly, you are providing the `yum` command to install a
-package that defines all of the repositories from EPEL, `epel-release-latest-9`.
+image::1_code-server.png[code-server]
 
-+
+You may want to utilize your browser’s zoom function at this point to be able to see the text more clearly.
+
+== Router connectivity and existing configurations
+
+In your terminal, test that you can SSH to rtr1 and rtr2. While logged in, find out the IOS-XE version being used and view their BGP configurations (commands to do that are provided below). You should not be prompted for a password as SSH keys have been set up ahead of time.
+
 [source,bash]
 ----
-buildah run ubi-working-container -- yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
+ssh rtr1
+show version
 ----
 
+On the first output line you should see:
 
-. You can verify that the above command did not install the RPM on the host system.
+`Cisco IOS XE Software, Version 17.14.01a`
 
-+
-[source,bash]
-----
-rpm -q epel-release
-----
+Then:
 
-NOTE: If your repository configurations are not distributed as an RPM, but instead as
-individual `.repo` files, you could use the `buildah copy` command to copy
-files from the host operating system into the container image.  You will see
-an example of using `buildah copy` later in this lab.
+`show running-config | sec router bgp`
 
-[#software]
-== Installing Software
+You should see:
 
-
-. Now that the yum repositories are defined within the container, execute 
-another `yum install`, within the container, to install the target
-software: `moon-buggy`.
-
-+
-[source,bash]
-----
-buildah run ubi-working-container -- yum -y install moon-buggy
-----
-
-
-== Committing the Container Image
-
-. At this point, the container is configured.  It is time to transition from a
-working container into a committed image.  In the command below, you will use
-the `buildah` command to commit the working container to an image called:
-`moon-buggy`.
-
-+
-[source,bash]
-----
-buildah commit ubi-working-container moon-buggy
-----
-
-+
-. The output of `podman image list` should confirm the image was created.
-
-+
-[source,bash]
-----
-podman image list
-----
-
-
-== Deploy the Container
-
-Now the software has been installed and a new container image created.  It is
-time to spawn a runtime of the container image and validate the software.  The
-software we are using is a command line command.  
-
-. When you `run` the container,
-it will be in interactive (`-it`) mode, based on the `moon-buggy` container
-image and the command run interactively will be `/usr/bin/moon-buggy`.
-
-+
-[source,bash]
-----
-podman run -it moon-buggy /usr/bin/moon-buggy
-----
-
-+
 [source,textinfo]
 ----
-
-<<< OUTPUT ABRIDGED >>>
-               MM     MM   OOOOO    OOOOO   NN     N
-               M M   M M  O     O  O     O  N N    N
-               M  M M  M  O     O  O     O  N  N   N
-               M   M   M  O     O  O     O  N   N  N
-               M       M  O     O  O     O  N    N N
-               M       M   OOOOO    OOOOO   N     NN
-
-                     BBBBBB   U     U   GGGGG    GGGGG   Y     Y
-                     B     B  U     U  G     G  G     G   Y   Y
-                     BBBBBB   U     U  G        G          Y Y
-                     B     B  U     U  G   GGG  G   GGG     Y
-                     B     B  U     U  G     G  G     G    Y
-                     BBBBBB    UUUUU    GGGGG    GGGGG   YY
-
-<<< OUTPUT ABRIDGED >>>
+router bgp 65000  
+bgp router-id 192.168.1.1  
+bgp log-neighbor-changes  
+neighbor 10.200.200.2 remote-as 65001  
+neighbor 10.200.200.2 ebgp-multihop 255  
+[...]
 ----
 
-. You can now play the Moon Buggy game, which is a text-based version of the
-popular Moon Patrol.  When you are finished, use the `q` command to quit the
-game, which will terminate the container.
-
-+
-Alternatively, you can use `podman` to kill the running container from
-*Terminal 2*.
-
-+
-[source,bash]
-----
-podman kill $(podman ps | grep -v CONTAINER | cut -f1 -d" " )
-----
+Exit and repeat for rtr2. The BGP configuration will be slightly different.
