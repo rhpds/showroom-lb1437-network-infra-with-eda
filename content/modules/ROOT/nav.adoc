@@ -1,21 +1,21 @@
 * xref:module-01.adoc[1. Lab Setup]
-** xref:module-01.adoc#codeserver[Accessing code-server]
-** xref:module-01.adoc#connect[Router connectivity and existing configurations]
+** xref:module-01.adoc#codeserver[1.1. Accessing code-server]
+** xref:module-01.adoc#connect[1.2. Router connectivity and existing configurations]
 
 * xref:module-02.adoc[2. Explore environment and BGP configuration]
-** xref:module-02.adoc#baseline[Applying baseline configuration]
-** xref:module-02.adoc#recover[Recovering from a misconfiguration]
+** xref:module-02.adoc#baseline[2.1. Applying baseline configuration]
+** xref:module-02.adoc#recover[2.2. Recovering from a misconfiguration]
 
-* xref:module-03.adoc[3. Establish the supporting software stack]
-** xref:module-03.adoc#yang[YANG Suite]
-** xref:module-03.adoc#telegraf[Telegraf and Kafka]
+* xref:module-03.adoc[3. Telegraf, Kakfa, and YANG]
+** xref:module-03.adoc#telegraf[3.1. Telegraf and Kafka]
+** xref:module-03.adoc#yang[3.2. YANG Models]
 
 * xref:module-04.adoc[4. Implement Event-Driven Ansible]
-** xref:module-04.adoc#ios[IOS configuration]
-** xref:module-04.adoc#rulebook[Using ansible-rulebook]
+** xref:module-04.adoc#ios[4.1. IOS configuration]
+** xref:module-04.adoc#rulebook[4.2. Using ansible-rulebook]
 
 * xref:module-05.adoc[5. Ansible Automation Platform]
-** xref:module-05.adoc#controller[Configuring Automation Controller]
-** xref:module-05.adoc#eda[Configuring Event-Driven Ansible Controller]
+** xref:module-05.adoc#controller[5.1. Configuring Automation Controller]
+** xref:module-05.adoc#eda[5.2. Configuring Event-Driven Ansible Controller]
 
 * xref:module-06.adoc[6. Extend the scope]
