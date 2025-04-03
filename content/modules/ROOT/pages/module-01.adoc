@@ -26,9 +26,13 @@ You may want to utilize your browser’s zoom function at this point to be able 
 
 In your terminal, test that you can SSH to rtr1 and rtr2. While logged in, find out the IOS-XE version being used and view their BGP configurations (commands to do that are provided below). You should not be prompted for a password as SSH keys have been set up ahead of time.
 
-[source,bash]
+[source,bash,role=execute]
 ----
 ssh rtr1
+----
+
+[source,bash,role=execute]
+----
 show version
 ----
 
