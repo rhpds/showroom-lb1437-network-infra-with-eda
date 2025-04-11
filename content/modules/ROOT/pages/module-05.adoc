@@ -96,7 +96,7 @@ Everything else can be left empty or default. Click the `Create rulebook activat
 
 Two things to highlight here:
 
-* The rulebook bgp_status_aap.yml is the same as the rulebook bgp_status_cli.yml that you ran earlier on the command line with one key difference: The action is to kick off a Job Template (the one you just made). This is the reason why you need the `Automation Controller` credential.
+* The rulebook `bgp_status_aap.yml` is the same as the rulebook `bgp_status_cli.yml` that you ran earlier on the command line with one key difference: The action is to kick off a Job Template (the one you just made). This is the reason why you need the `Automation Controller` credential.
 * We are using a Decision Environment, which is like an Execution Environment, but for use with Event-Driven Ansible.
 
 The Rulebook Activation will try to start. As before, with the new environment you'll need to wait for it to pull the Decision Environment image, but after about a minute you should see `Activation status` change to `Running`. At the top of the screen, click on the `History` tab, then click on the `1- BGP status` link. Here is where we can see the ansible-rulebook log and verify that everything came up with no errors.
