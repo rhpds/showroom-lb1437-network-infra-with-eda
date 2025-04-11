@@ -20,7 +20,12 @@ The playbook to do this has been provided for you. In your student workbench, in
 
 This is a major reason to check out Validated Content - in this situation, we have an easy way to do something complex (in this case, deploy two applications, which will communicate with each other, in containers).
 
-In the terminal, if you are still root, exit back to the student user. If you are in any directory other than ansible-cisco-telemetry, `cd` back to there. Then go ahead and run this playbook:
+In the terminal, if you are still root, exit back to the student user. If you are in any directory other than ansible-cisco-telemetry, `cd` back to there. Then go ahead and run the playbook.
+
+[source,bash,role=execute]
+----
+cd ~/ansible-cisco-telemetry
+----
 
 [source,bash,role=execute]
 ----
@@ -218,3 +223,5 @@ module: Cisco-IOS-XE-bgp-oper
 ----
 
 We can see the data available in the model displayed as a hierarchichal tree. We can already see that under `bgp-state-data` is a key called `neighbors`, and under that is a key called `neighbor`, and under that is some promising-looking data about BGP state. We'll remember the path `bgp-state-data/neighbors`.
+
+NOTE: The other files under `yang_files` that we didn't use are dependencies of the one we did use. They were pulled down automatically and can be ignored.

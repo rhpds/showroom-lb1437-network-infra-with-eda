@@ -54,7 +54,7 @@ neighbor 10.200.200.2 remote-as 65009
 end
 ----
 
-Now swap back to your Kafka terminal. We should see some long JSON messages appearing, describing the state of our routers`' BGP neighbors. These messages appear as a big block with a blank line between them (really it's a single line wrapping). Select (click/drag) one of the messages and copy (ctrl+C) it.
+Now swap back to your Kafka terminal. We should see some long JSON messages appearing, describing the state of our routers`' BGP neighbors. These messages appear as a big block with a blank line between them (really it's a single line wrapping). Select (click/drag) one of the messages and copy (CTRL+C) it.
 
 In your code-server workbench, go to File > New File... and type `bgp.json` in the box. Hit Enter twice, then paste the message we copied into the new blank file that opens. It initially pastes as a single line. Right click anywhere in the line and choose `Format Document`. This will allow us to read through the message (you may have to scroll left).
 

@@ -70,6 +70,10 @@ Time to break things. Let's start by logging into rtr1 over SSH and looking at t
 [source,bash,role=execute]
 ----
 ssh rtr1
+----
+
+[source,bash,role=execute]
+----
 show ip bgp summary
 ----
 
@@ -89,7 +93,7 @@ Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State
 
 This looks good, and we want to pay attention to the very last bit of data in the bottom right, `State/PfxRcd`. The `4` that we see now is normal in this environment.
 
-Now to break things, we are going to enter an incorrect AS number for rtr1's neighbor router. Issue the following commands:
+Now to break things, we are going to enter an incorrect AS number for rtr1's neighbor router (`65009` instead of `65001`). Issue the following commands:
 
 [source]
 ----
@@ -121,6 +125,10 @@ SSH back into rtr1 and check the BGP state again.
 [source,bash,role=execute]
 ----
 ssh rtr1
+----
+
+[source,bash,role=execute]
+----
 show ip bgp summary
 ----
 
