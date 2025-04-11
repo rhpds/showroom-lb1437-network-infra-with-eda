@@ -19,36 +19,37 @@ image::6_templates.png[Templates]
 
 Fill out the form with the information below:
 
+[cols="1,1"]
 |===
-| Name | BGP configuration |
+| *Name*
+| BGP configuration
 
 | *Organization*
 | Default
-|
+
 
 | *Inventory*
 | Workshop Inventory
-|
+
 
 | *Project*
 | Cisco Telemetry
-|
+
 
 | *Playbook*
 | playbooks/configure_ios_bgp.yml
-|
+
 
 | *Credentials*
-| Workshop Credential
-| Machine
+| Workshop Credential \| Machine
 
 | *Execution environment*
 | network workshop execution environment
-|
+
 
 | *Extra variables*
 | Check `Prompt on launch` box
-|
+
 |===
 
 When this information is entered, click the `Save job template` button.
@@ -70,8 +71,10 @@ In the left side navigation, under Automation Decisions, click on Rulebook Activ
 
 Similar to what you did for the Job Template, fill out the form with the information below:
 
+[cols="1,1"]
 |===
-| Name | BGP status
+| *Name*
+| BGP status
 
 | *Organization*
 | Default
