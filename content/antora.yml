@@ -6,8 +6,7 @@ nav:
 
 asciidoc:
   attributes:
-    lab_url: https://dssc7.devel.opentlc.com/
-    lab_password: undefined
+    lab_url: https://red.ht/summit25-eda-net
     lab_name: "LB1437 - Self-Healing Network Infrastructure with Event-Driven Ansible"
     release-version: master
     page-pagination: true

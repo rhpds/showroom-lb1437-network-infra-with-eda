@@ -4,7 +4,7 @@
 
 To access lab resources, go to: {lab_url}
 
-You will be prompted for a password, which is: *{lab_password}*
+You will be prompted for a password, which will be provided to you by your lab instructor.
 
 Next, you will be prompted for your name and email address. The values you submit here will be used to get you back into your same environment if anything happens with your PC.
 
