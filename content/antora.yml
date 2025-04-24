@@ -16,5 +16,9 @@ asciidoc:
     ssh_password: devops
     ssh_command: ssh someone@example.com
     page-links:
-    - url: https://redhat.com
-      text: Red Hat
+    - url: https://www.redhat.com/en/technologies/management/ansible/event-driven-ansible
+      text: Event-Driven Ansible
+    - url: https://github.com/zjpeterson/ansible-cisco-telemetry
+      text: Lab Code
+    - url: https://www.cisco.com/c/en/us/products/collateral/switches/catalyst-9300-series-switches/model-driven-telemetry-wp.html
+      text: Cisco MDT Whitepaper
