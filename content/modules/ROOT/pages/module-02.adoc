@@ -1,4 +1,4 @@
-= Explore environment and BGP configuration
+= Explore environment and router configuration
 
 We will be using Network Resource Modules, which differ from other module designs you may have worked with in Ansible.
 
@@ -9,63 +9,58 @@ Ansible network resource modules simplify and standardize how you manage differe
 https://docs.ansible.com/ansible/latest/network/user_guide/network_resource_modules.html[Ansible Documentation]
 ====
 
-In the file tree on the left side of your VSCode environment, expand the `ansible-cisco-telemetry` folder, expand the `playbooks` folder under that, then click on `configure_ios_bgp.yml` to open it.
+In the file explorer on the left side of your VSCode environment, expand the `playbooks` folder, then click on `configure_ios_routing.yml` to open it.
 
-This is a playbook that applies a baseline BGP configuration to a Cisco IOS(-XE) router. Let's dig into a few things about this playbook:
+This is a playbook that applies a minimal configuration to a router in our lab. Let's dig into a few things about this playbook:
 
 * The hosts line
  ** Later in the lab, Event-Driven Ansible (EDA) is going to identify which devices in our lab have had their configurations changed. We want to be able to only run remediation on devices that we know need it, which is what the `ansible_eda` variable is for.
  ** We don't have EDA involved yet, so `ansible_eda` is not defined, and we'll therefore default to rtr1 and rtr2 for now.
 * The resource state
  ** For the sake of this lab, we're using state `merged`, which is the least destructive state we can use, and is recommended for testing.
- ** You can check out the document on Resource Modules linked above for a description of the available states and why you'd want to use each one. The `replaced` state, for example, would wipe out any configuration in the relevant subsection _not_ found in the resource data, which is helpful for drift control.
+ ** You can check out the document on Resource Modules linked above for a description of the available states and why you'd want to use each one. The `replaced` state, for example, would wipe out any configuration in the relevant subsection _not_ found in the resource data, which is helpful for compliance and drift control.
 * The resource data
- ** The module inputs are very minimal, as they reference variable data. This data can be found under the `host_vars` directory.
- ** Take a moment to look at the two files under `host_vars/`, `rtr1.yml` and `rtr2.yml`, and how they differ.
+ ** The module inputs are very minimal, as they reference variable data. This data can be found under the `host_vars` directory within `playbooks`.
+ ** Take a moment to expand the `host_vars` directory, then expand `rtr1` and/or `rtr2`. Each resource has its own file. The files relevant to us right now are `bgp_global.yml` and `interfaces.yml` since they contain the variables used in our playbook. Collapse `host_vars` again before moving on.
 
-This playbook and its resource data represent an *Infrastructure as Code* approach to managing the BGP configuration on our two routers. This will be our *source of truth* for this lab's network configuration. In other words, we want to treat this code as the definitive answer to what the router configurations should be, regardless of what's currently applied to the device.
+This playbook and its resource data represent an *Infrastructure as Code* approach to managing the configuration on our two routers. This will be our *source of truth* for this lab's network configuration. In other words, we want to treat this code as the definitive answer to what the router configurations should be, regardless of what's currently applied.
 
 [#baseline]
 == Applying baseline configuration
 
 Let's run this playbook a couple of times.
 
-Before doing anything, change into the `ansible-cisco-telemetry` directory.
+For our first run, use the following command (using `-vv` for verbosity level 2):
 
 [source,bash,role=execute]
 ----
-cd ~/ansible-cisco-telemetry
+ansible-navigator run playbooks/configure_ios_routing.yml -vv
 ----
 
-For our first run, use the following command:
+TIP: Your first run will take a moment to spin up.
 
-[source,bash,role=execute]
-----
-ansible-navigator run playbooks/configure_ios_bgp.yml -vv
-----
-
-We should see the first two tasks report `ok` - so nothing changed. But the in the last task's output, you should see something like below:
+We should see the first task report `ok` - so nothing changed. But the in the second task's output, you should see something like below:
 
 [source,textinfo]
 ----
 changed: [rtr1] \=> {"after": {"as_number": "65000", "bgp": {"default": {"ipv4_unicast": true, "route_target": {"filter": true}}, "log_neighbor_changes": true, "router_id": {"address": "192.168.1.1"}}, "neighbors": [{"neighbor_address": "10.200.200.2", "remote_as": "65001"}]}, "before": {"as_number": "65000", "bgp": {"default": {"ipv4_unicast": true, "route_target": {"filter": true}}, "log_neighbor_changes": true, "router_id": {"address": "192.168.1.1"}}, "neighbors": [{"neighbor_address": "10.200.200.2", "remote_as": "65001"}]}, "changed": true, "commands": ["router bgp 65000", "timers bgp 5 15"]}
 ----
 
-Refer to the `commands` output at the end to see that the resource module was able to figure out which commands needed to be run to accomplish the configuration, even though our configuration data is stored as YAML. We were only missing the `timers` part - this is for the lab so that BGP can more quickly tell when something is wrong.
+Refer to the `commands` output at the end (scroll right in the box above) to see that the resource module was able to figure out which commands needed to be run to accomplish the configuration, even though our configuration data is stored as YAML. We were only missing the `timers` part. This is for the lab so that BGP can more quickly tell when something is wrong, and we'll be making use of that later.
 
 Run the playbook again and drop the verbosity:
 
 [source,bash,role=execute]
 ----
-ansible-navigator run playbooks/configure_ios_bgp.yml
+ansible-navigator run playbooks/configure_ios_routing.yml
 ----
 
-This time all the tasks report `ok`. This means that our live configuration still matches our source of truth. It also means that the playbook is *idempotent*, meaning that we can run this playbook as many times as we want without applying any change, as long as the configuration stays correct.
+This time both of the tasks report `ok`. This means that our live configuration still matches our source of truth. It also means that the playbook is *idempotent*, meaning that we can run this playbook as many times as we want without applying any change, as long as the configuration stays correct.
 
 [#recover]
 == Recovering from a misconfiguration
 
-Time to break things. Let's start by logging into rtr1 over SSH and looking at the BGP summary.
+Time to break things. Let's start by logging into `rtr1` over SSH and looking at the output of a couple commands. Run the following:
 
 [source,bash,role=execute]
 ----
@@ -74,53 +69,91 @@ ssh rtr1
 
 [source,bash,role=execute]
 ----
-show ip bgp summary
+show ip interface brief
 ----
 
-Example output:
-
-[source,textinfo]
-----
-[student@ansible-1 ansible-cisco-telemetry]$ ssh rtr1
-
-rtr1#show ip bgp summary
-BGP router identifier 192.168.1.1, local AS number 65000
-[...]
-
-Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
-10.200.200.2    4        65001     332     331        8    0    0 04:58:18        4
-----
-
-This looks good, and we want to pay attention to the very last bit of data in the bottom right, `State/PfxRcd`. The `4` that we see now is normal in this environment.
-
-Now to break things, we are going to enter an incorrect AS number for rtr1's neighbor router (`65009` instead of `65001`). Issue the following commands:
+Expected output:
 
 [source]
 ----
-configure terminal
-router bgp 65000
-neighbor 10.200.200.2 remote-as 65009
-end
+rtr1#show ip interface brief 
+Interface              IP-Address      OK? Method Status                Protocol
+GigabitEthernet1       172.16.147.219  YES DHCP   up                    up      
+Loopback0              192.168.1.1     YES manual up                    up      
+Tunnel0                10.100.100.1    YES manual up                    up      
+Tunnel1                10.200.200.1    YES manual up                    up      
+VirtualPortGroup0      192.168.35.101  YES TFTP   up                    up      
 ----
 
-Run `show ip bgp summary` again and we should see bad things happening to our BGP state (note the incorrect AS number and state being listed as `Closing` or `Idle` depending on how long you gave it)
-
-[source,textinfo]
-----
-Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
-10.200.200.2    4        65009       2       2        1    0    0 00:00:04 Closing
-----
-
-Now, exit your SSH session and re-run the playbook we were just running.
+We can see that all of the interfaces on the router are up, including `Tunnel0`, which we identified earlier as being involved in OSPF. Let's look at that next. Run the following:
 
 [source,bash,role=execute]
 ----
-ansible-navigator run playbooks/configure_ios_bgp.yml
+show ip ospf neighbor
 ----
 
-We should get `changed` reported only on rtr1 and only on the BGP configuration task.
+Expected output:
 
-SSH back into rtr1 and check the BGP state again.
+[source]
+----
+rtr1#show ip ospf neighbor 
+
+Neighbor ID     Pri   State           Dead Time   Address         Interface
+192.168.3.3       0   FULL/  -        00:00:30    10.100.100.2    Tunnel0
+----
+
+Again we see the importance of `Tunnel0`. What happens if `Tunnel0` gets shut down? Let's find out. Run the following commands:
+
+[source,role=execute]
+----
+configure terminal
+interface Tunnel0
+shutdown
+end
+----
+
+Check to see that the interface came down:
+
+[source,bash,role=execute]
+----
+show ip interface brief
+----
+
+Expected output:
+
+[source]
+----
+rtr1#show ip interface brief
+Interface              IP-Address      OK? Method Status                Protocol
+GigabitEthernet1       172.16.147.219  YES DHCP   up                    up      
+Loopback0              192.168.1.1     YES manual up                    up      
+Tunnel0                10.100.100.1    YES manual administratively down down    
+Tunnel1                10.200.200.1    YES manual up                    up      
+VirtualPortGroup0      192.168.35.101  YES TFTP   up                    up       
+----
+
+And see its effect on OSPF:
+
+[source,role=execute]
+----
+show ip ospf neighbor
+----
+
+You get no output from running this command, which is not good. We should turn `Tunnel0` back on. But, rather than doing that manually, we should be able to have Ansible get us back to a known-good state. Exit out of the SSH session and run the configuration playbook that we were running before.
+
+[source,role=execute]
+----
+exit
+----
+
+[source,bash,role=execute]
+----
+ansible-navigator run playbooks/configure_ios_routing.yml
+----
+
+We should get `changed` reported only on rtr1 and only on the interface configuration task.
+
+SSH back into rtr1 and check the interface state again.
 
 [source,bash,role=execute]
 ----
@@ -129,7 +162,21 @@ ssh rtr1
 
 [source,bash,role=execute]
 ----
-show ip bgp summary
+show ip interface brief
 ----
 
-We should see that our state is back to the normal `4` output. This shows us that we can use this playbook to recover from misconfiguration issues.
+[source,role=execute]
+----
+show ip ospf neighbor
+----
+
+We should see that our state is back to normal. This shows us that we can use this playbook to recover from misconfiguration issues.
+
+Exit your SSH session before moving on.
+
+[source,role=execute]
+----
+exit
+----
+
+NOTE: We are doing this work on a router and working with routing protocols, but as you work through the lab, consider how this could also apply to switches. The way we are working with interfaces in this lab would be no different.

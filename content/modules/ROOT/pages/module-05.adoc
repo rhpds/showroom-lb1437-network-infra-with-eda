@@ -17,28 +17,23 @@ Once logged in, in the left side navigation, expand `Automation Execution` and c
 
 image::6_templates.png[Templates]
 
+TIP: If you don't have a navigation bar as seen in the screenshot, it may be hidden due to limited screen space. You can click on the 3 lines in the upper left corner to access it.
+
 Fill out the form with the information below:
 
 [cols="1,1"]
 |===
 | *Name*
-| BGP configuration
-
-| *Organization*
-| Default
-
+| Router configuration
 
 | *Inventory*
 | Workshop Inventory
 
-
 | *Project*
 | Cisco Telemetry
 
-
 | *Playbook*
-| playbooks/configure_ios_bgp.yml
-
+| playbooks/configure_ios_routing.yml
 
 | *Credentials*
 | Workshop Credential \| Machine
@@ -46,10 +41,8 @@ Fill out the form with the information below:
 | *Execution environment*
 | network workshop execution environment
 
-
 | *Extra variables*
 | Check `Prompt on launch` box
-
 |===
 
 When this information is entered, click the `Save job template` button.
@@ -65,16 +58,16 @@ After about a minute (you will be waiting for the Execution Environment image to
 [#eda]
 == Configuring Event-Driven Ansible Controller
 
-Now that we have the AAP equivalent of applying our BGP configuration on the command line, we need to work on building the AAP equivalent of the ansible-rulebook command we were running in Exercise 4.2.
+Now that we have the AAP equivalent of our `ansible-navigator` command on the command line, we need to work on building the AAP equivalent of the `ansible-rulebook` command we were running in Exercise 4.2.
 
-In the left side navigation, under Automation Decisions, click on Rulebook Activations. You shouldn't have any activations yet, so click on the blue `Create rulebook activation` button.
+In the left side navigation, expand Automation Decisions, and click on Rulebook Activations. You shouldn't have any activations yet, so click on the blue `Create rulebook activation` button.
 
 Similar to what you did for the Job Template, fill out the form with the information below:
 
 [cols="1,1"]
 |===
 | *Name*
-| BGP status
+| Interface status
 
 | *Organization*
 | Default
@@ -83,7 +76,7 @@ Similar to what you did for the Job Template, fill out the form with the informa
 | Cisco Telemetry
 
 | *Rulebook*
-| bgp_status_aap.yml
+| interface_status_aap.yml
 
 | *Credentials*
 | Automation Controller
@@ -96,25 +89,31 @@ Everything else can be left empty or default. Click the `Create rulebook activat
 
 Two things to highlight here:
 
-* The rulebook `bgp_status_aap.yml` is the same as the rulebook `bgp_status_cli.yml` that you ran earlier on the command line with one key difference: The action is to kick off a Job Template (the one you just made). This is the reason why you need the `Automation Controller` credential.
+* The rulebook `interface_status_aap.yml` is the same as the rulebook `interface_status_cli.yml` that you ran earlier on the command line with one key difference: The action is to kick off a Job Template (the one you just made). This is the reason why you need the `Automation Controller` credential.
 * We are using a Decision Environment, which is like an Execution Environment, but for use with Event-Driven Ansible.
 
-The Rulebook Activation will try to start. As before, with the new environment you'll need to wait for it to pull the Decision Environment image, but after about a minute you should see `Activation status` change to `Running`. At the top of the screen, click on the `History` tab, then click on the `1- BGP status` link. Here is where we can see the ansible-rulebook log and verify that everything came up with no errors.
+The Rulebook Activation will try to start. As before, with the new environment you'll need to wait for it to pull the Decision Environment image, but after about a minute you should see `Activation status` change to `Running`. At the top of the screen, click on the `History` tab, then click on the `1 - Interface status` link. Here is where we can see the ansible-rulebook log and verify that everything came up with no errors.
 
-As before, we want to break BGP to see it get fixed. Switch back to your code-server tab and ssh to rtr1 to do so. The commands again are:
+As before, we want to break the router config to see it get fixed. Switch back to your VSCode tab and ssh to rtr1 to do so. The commands again are:
+
+[source,role=execute]
+----
+ssh rtr1
+----
 
 [source,role=execute]
 ----
 configure terminal
-router bgp 65000
-neighbor 10.200.200.2 remote-as 65009
-end
+interface Tunnel0
+shutdown
 ----
 
-Switch back to your AAP tab. In the left side navigation, under Automation Decisions, click on Rule Audit. Depending on how quick you were, you'll either already see an entry on this page, or one will appear shortly. Once available, click on `Re-apply BGP config when not established` (which is the name of the rule in the rulebook).
+Switch back to your AAP tab. In the left side navigation, under Automation Decisions, click on Rule Audit. Depending on how quick you were, you'll either already see an entry on this page, or one will appear shortly. Once available, click on `Re-apply config when interface not up` (which is the name of the rule in the rulebook).
 
 On the page that appears, click on the `Events` tab. There should be one entry for ansible.eda.kafka. Click on it. The event details pop up, and we can see that we have the same data available to us as we did in Exercise 4.1. Click the `Close` button.
 
-Click on the `Actions` tab. We can see a single entry `run_job_template`. If you click on that link, it will show you the job results in a new tab. You should see that the `Apply BGP Global config` task reports `changed` just as it did before on the CLI.
+Click on the `Actions` tab. We can see a single entry `run_job_template`. Instead of clicking the link, in the left side navigation, click on *Automation Execution > Jobs*. You should see a second instance of "Router configuration" appear in the list with a very recent timestamp. Click on it to observe that the "Apply interfaces config" task reports `changed` just as it did before on the CLI.
+
+image::10_intf-changed.png[intf-changed]
 
 You now have AAP running the same Event-Driven workload as we developed on the command line.

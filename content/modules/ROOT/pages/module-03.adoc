@@ -1,6 +1,6 @@
 = Telegraf, Kafka, and YANG
 
-Our goal will be to have our routers able to self-report when BGP has broken, as we simulated in the last section. We'll need to install some software to help us bridge the gap between the routers and Ansible, and we'll need to find out where the data about BGP state is.
+Our goal will be to have our routers self-report when something is wrong, so that Ansible can fix it, as we simulated in the last section. We'll need to install some software to help us bridge the gap between the routers and Ansible, and we'll need to find out some information about the data we need to do this.
 
 [#telegraf]
 == Telegraf and Kafka
@@ -14,18 +14,13 @@ Ansible validated content is a new set of collections containing pre-built YAML 
 https://access.redhat.com/support/articles/ansible-automation-platform-certified-content[Red Hat Customer Portal]
 ====
 
-We'll be using the validated *network.telemetry* collection to install a Telegraf/Kafka stack in containers, that will translate the telemetry messages coming from the Cisco device and make them consumable by Event-Driven Ansible.
+Specifically, we'll be using the validated `network.telemetry` collection to install a Telegraf/Kafka stack in containers, that will translate the telemetry messages coming from the Cisco device and make them consumable by Event-Driven Ansible.
 
-The playbook to do this has been provided for you. In your student workbench, inside the `ansible-cisco-telemetry/playbooks` directory, click on `install_telemetry_stack.yml` and take a look at what it does. You can see that it's using a single role, `network.telemetry.run`, with a couple variables specifying what we want the role to do.
+The playbook to do this has been provided for you. In your student workbench, inside the `playbooks` directory, click on `install_telemetry_stack.yml` and take a look at what it does. You can see that it's using a single role, `network.telemetry.run`, with a couple variables specifying what we want the role to do.
 
 This is a major reason to check out Validated Content - in this situation, we have an easy way to do something complex (in this case, deploy two applications, which will communicate with each other, in containers).
 
-In the terminal, if you are still root, exit back to the student user. If you are in any directory other than ansible-cisco-telemetry, `cd` back to there. Then go ahead and run the playbook.
-
-[source,bash,role=execute]
-----
-cd ~/ansible-cisco-telemetry
-----
+Go ahead and run this playbook.
 
 [source,bash,role=execute]
 ----
@@ -49,13 +44,16 @@ bd3888848d03   confluentinc/cp-kafka:7.3.2       "/etc/confluent/dock…"   7 mi
 6ab3f6677c82   confluentinc/cp-zookeeper:7.3.2   "/etc/confluent/dock…"   7 minutes ago    Up 7 minutes    2181/tcp, 2888/tcp, 3888/tcp                                                  zookeeper
 ----
 
-On the line for Telegraf, we can see `+0.0.0.0:8089->57000/tcp+` which means that we have port 57000 inside the Telegraf container mapped to port 8089 outside of the container.
+On the line for Telegraf, we can see `0.0.0.0:8089->57000/tcp` which means that we have port 57000 inside the Telegraf container mapped to port 8089 outside of the container.
 
-Similarly, on the line for Kafka we can see `+0.0.0.0:9092->9092/tcp+` which means that we have port 9092 inside the Kafka container mapped to the same port 9092 outside of the container.
+Similarly, on the line for Kafka we can see `0.0.0.0:9092->9092/tcp` which means that we have port 9092 inside the Kafka container mapped to the same port 9092 outside of the container.
 
-The playbook also added some Telegraf configuration that we can look at. In your student workbench, in the file tree on the left, you should now have a `telegraf`` directory that wasn't there before.
+The playbook also added some Telegraf configuration that we can look at. In your terminal, run the following:
 
-The telegraf directory has a `telegraf.conf`` file inside of it. This is mounted to the Telegraf container. Let's look at the `telegraf.conf` file by clicking on it.
+[source,bash, role=execute]
+----
+cat /home/student/telegraf/telegraf.conf
+----
 
 Telegraf is a piece of software that takes inputs in one format and outputs them in another, so that's what we're going to be looking for in the configuration file.
 
@@ -81,11 +79,10 @@ topic = "eda"
 data_format = "json"
 ----
 
-Again from the Docker output we know that we can access Kafka on port 9092 from the outside but we also see here that Telegraf will use a different port (29092) to output to it. We can ignore that detail in this situation; what's important is we know that the telemetry messages received by Telegraf will be outputted to Kafka on a topic called `eda`.
+Again from the Docker output we know that we can access Kafka on port 9092 from the outside, but we also see here that Telegraf will use a different port (29092) to output to it. We can ignore that detail in this situation; what's important is we know that the telemetry messages received by Telegraf will be outputted to Kafka on a topic called `eda`.
 
-Let's get a dedicated Kafka terminal up. listening for any messages coming in on this `eda` topic. In your student workbench, at the top of the terminal, you have a `+` button. Click it, and you should have a new bash terminal come up. You can swap between them on the right. It may be helpful to right-click on your new second terminal, choose Rename, and call it `kafka` since that is all we'll use it for.
+Let's verify that Kafka is up and we can connect to it. In your terminal, run:
 
-In your new terminal, run:
 [source,bash,role=execute]
 ----
 sudo docker exec -it broker kafka-console-consumer --bootstrap-server localhost:9092 --topic eda
@@ -98,12 +95,12 @@ You should get some warnings like:
 [2025-03-05 22:54:56,148] WARN [Consumer clientId=console-consumer, groupId=console-consumer-14849] Error while fetching metadata with correlation id 2 : {eda=LEADER_NOT_AVAILABLE} (org.apache.kafka.clients.NetworkClient)
 ----
 
-The `LEADER_NOT_AVAILABLE` message means that no messages have been received on this topic, but we are successfully talking to Kafka regardless, which is what we expect at this stage. Leave this terminal open and switch back to your first/original terminal.
+The `LEADER_NOT_AVAILABLE` message means that no messages have been received on this topic, but we are successfully talking to Kafka regardless, which is what we expect at this stage. Press CTRL+C to exit out of the Kafka listener for now.
 
 [#yang]
 == YANG models
 
-We're going to want to configure our routers for Model-Driven Telemetry in order to send data to Telegraf, but we don't yet know the location of the data we need. We can use Ansible to figure that out.
+We're going to want to configure our routers for Model-Driven Telemetry in order to send data to Telegraf, but we don't yet know the location of the data we need. We can use Ansible to figure that out, using the certified `ansible.yang` collection to query YANG models on our lab router.
 
 [NOTE]
 ====
@@ -127,60 +124,60 @@ end
 exit
 ----
 
-Next, in your student workbench, under `ansible-cisco-telemetry/playbooks`, take a look at the playbook `yang_info.yml`.
+Next, in your file explorer, under `playbooks`, take a look at the playbook `yang_info.yml`.
 
-This playbook targets `rtr1` and has two tasks. The first pulls down a list of all YANG models that the target device says it can support. The second searches that list for a term supplied in the variable `search_for`. That variable's value is set to "bgp". Therefore, what you should see when you run this playbook, is a list of YANG models suported by `rtr1` that are related to configuring or monitoring BGP. Go ahead and run it.
+This playbook targets `rtr1` and has two tasks. The first pulls down a list of all YANG models that the target device says it can support. The second searches that list for a term supplied in the variable `search_for`. That variable's value is set to "interface". Therefore, what you should see when you run this playbook, is a list of YANG models suported by `rtr1` that are related to configuring or monitoring interfaces. Go ahead and run it.
 
 [source,bash,role=execute]
 ----
 ansible-navigator run playbooks/yang_info.yml
 ----
 
-[TIP]
-====
-It takes some time for the NETCONF listener to come up from the previous step. If you run the playbook too soon, it may time out or seem to be hanging. You should be able to just try again.
-====
+TIP: It takes some time for the NETCONF listener to come up from the previous step. If you run the playbook too soon, it may time out or seem to be hanging. If that happens to you, press CTRL+C and try running the playbook again.
 
 The output should look like:
 [source]
 ----
-PLAY [Identify YANG modules] ********************************************************************************************************************************************************
+[student@ansible-1 ansible-cisco-telemetry]$ ansible-navigator run playbooks/yang_info.yml
 
-TASK [Fetch YANG info] ********************************************************************************************************************************************************
+PLAY [Identify YANG modules] *******************************************************************************************************************
+
+TASK [Fetch YANG info] *******************************************************************************************************************
 ok: [rtr1]
 
-TASK [Show supported modules] ********************************************************************************************************************************************************
+TASK [Show supported modules] *******************************************************************************************************************
 ok: [rtr1] => {
     "yang_info.supported_yang_modules | select('search', search_for, ignorecase=true)": [
-        "BGP4-MIB",
-        "CISCO-BGP-POLICY-ACCOUNTING-MIB",
-        "CISCO-BGP4-MIB",
-        "Cisco-IOS-XE-bgp",
-        "Cisco-IOS-XE-bgp-actions-rpc",
-        "Cisco-IOS-XE-bgp-common-oper",
-        "Cisco-IOS-XE-bgp-oper",
-        "Cisco-IOS-XE-bgp-route-oper",
-        "Cisco-IOS-XE-bgp-rpc",
-        "cisco-xe-openconfig-bgp-deviation",
-        "cisco-xe-openconfig-bgp-policy-deviation",
-        "cisco-xe-openconfig-rib-bgp-ext",
-        "openconfig-bgp",
-        "openconfig-bgp-common",
-        "openconfig-bgp-common-multiprotocol",
-[truncated]
+        "Cisco-IOS-XE-interface-common",
+        "Cisco-IOS-XE-interfaces",
+        "Cisco-IOS-XE-interfaces-oper",
+        "Cisco-IOS-XE-yang-interfaces-cfg",
+        "Cisco-IOS-XE-yang-interfaces-oper",
+        "cisco-xe-openconfig-interfaces-deviation",
+        "cisco-xe-openconfig-interfaces-ext",
+        "ietf-interfaces",
+        "ietf-interfaces-ext",
+        "openconfig-interfaces",
+        "openconfig-ospfv2-area-interface",
+        "openconfig-pf-interfaces"
+    ]
+}
+
+PLAY RECAP *******************************************************************************************************************
+rtr1                       : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0  
 ----
 
-YANG can be used for both operational data as well as configuration data. We see both kinds of results in this output. For our telemetry purposes, we want YANG modules with "oper" in the name. It looks like `Cisco-IOS-XE-bgp-oper` is what we want. We can take a note of that and move on.
+YANG can be used for both operational data as well as configuration data. We see both kinds of results in this output. For our telemetry purposes, we want YANG modules with "oper" in the name. It looks like `Cisco-IOS-XE-interfaces-oper` is what we want. We can take a note of that and move on.
 
 Now that we have the name of the module we want to work with, we need to determine *where* in the module the data we want is. Since YANG modules are expressed in an XML tree format, what we're looking for now will be an "xpath" (short for XML path).
 
-In your student workbench, under `ansible-cisco-telemetry/playbooks`, take a look at the playbook `yang_fetch.yml`.
+In your file explorer, under `playbooks`, take a look at the playbook `yang_fetch.yml`.
 
-Like before, this playbook targets `rtr1` and has two tasks. The first pulls down the YANG model file for the model specified in the `model` variable. You can see that's set to "Cisco-IOS-XE-bgp-oper" which we just determined using the previous playbook. The model file will be stored locally for you to work with. The second task reads the model file and produces a tree schema, which we can read more easily than the model file itself.
+Like before, this playbook targets `rtr1` and has two tasks. The first pulls down the YANG model file for the model specified in the `model` variable. You can see that's set to "Cisco-IOS-XE-interfaces-oper" which we just determined using the previous playbook. The model file will be stored locally for you to work with. The second task reads that model file and produces a tree schema, which we can read more easily than the model file itself.
 
 [NOTE]
 ====
-You may also notice that both of these playbooks override the `ansible_connection` variable to be `ansible.netcommon.netconf`. In the lab inventory, this is set to `ansible.netcommon.network_cli` (SSH), which is the expected way to interact with IOS. The modules in the `ansible.yang` collection are vendor-agnostic and expect to speak NETCONF instead of SSH, so rather than change the Ansible inventory, we are just doing a play-level override.
+You may also notice that both of these playbooks override the `ansible_connection` variable to be `ansible.netcommon.netconf`. In the lab inventory, this is set to `ansible.netcommon.network_cli` (SSH), which is the expected way to interact with IOS. The modules in the `ansible.yang` collection are vendor-agnostic and expect to speak NETCONF instead, so rather than change the Ansible inventory, we are just doing a play-level override.
 ====
 
 Let's run the playbook.
@@ -190,38 +187,31 @@ Let's run the playbook.
 ansible-navigator run playbooks/yang_fetch.yml
 ----
 
-Once you do this, you should now have a `yang_files` directory that has been created in the same directory as the playbook. Find this in your file tree on the left and expand it. You should see some `.yang` files and a `.tree` file inside.
+Once the playbook finishes, you should now have a `yang_files` directory that has been created under `playbooks`. Find this in your file explorer on the left and expand it. You should see some `.yang` files and a `.tree` file inside.
 
 image::8_yang-files.png[yang files]
 
-Click on `Cisco-IOS-XE-bgp-oper.yang` and look for a line starting with "prefix". You should see:
+Click on `Cisco-IOS-XE-interfaces-oper.yang` and look for a line starting with "prefix". You should see:
 
 ----
-  prefix bgp-ios-xe-oper;
+  prefix interfaces-ios-xe-oper;
 ----
 
-That's one part of the information we need. For the other part, let's look in `Cisco-IOS-XE-bgp-oper.tree`.
+That's one part of the information we need. For the other part, let's look in `Cisco-IOS-XE-interfaces-oper.tree`.
 
 [source,textinfo]
 ----
-module: Cisco-IOS-XE-bgp-oper
-  +--ro bgp-state-data
-     +--ro neighbors
-     |  +--ro neighbor* [afi-safi vrf-name neighbor-id]
-     |     +--ro afi-safi                       bgp-common-ios-xe-oper:afi-safi
-     |     +--ro vrf-name                       string
-     |     +--ro neighbor-id                    string
-     |     +--ro description?                   string
-     |     +--ro bgp-version?                   uint16
-     |     +--ro link?                          bgp-ios-xe-oper:bgp-link
-     |     +--ro up-time?                       string
-     |     +--ro last-write?                    string
-     |     +--ro last-read?                     string
-     |     +--ro installed-prefixes?            uint32
-     |     +--ro session-state?                 bgp-ios-xe-oper:bgp-fsm-state
+module: Cisco-IOS-XE-interfaces-oper
+  +--ro interfaces
+     +--ro interface* [name]
+        +--ro name                            string
+        +--ro interface-type?                 interfaces-ios-xe-oper:ietf-intf-type
+        +--ro admin-status?                   interfaces-ios-xe-oper:intf-state
+        +--ro oper-status?                    interfaces-ios-xe-oper:oper-state
+        +--ro last-change?                    yang:date-and-time
 [truncated]
 ----
 
-We can see the data available in the model displayed as a hierarchichal tree. We can already see that under `bgp-state-data` is a key called `neighbors`, and under that is a key called `neighbor`, and under that is some promising-looking data about BGP state. We'll remember the path `bgp-state-data/neighbors`.
+Here we have the data available in the model displayed as a hierarchichal tree. We can see that there is a key called `interfaces` containing some promising-looking data about interface state. We'll remember the path `interfaces`.
 
 NOTE: The other files under `yang_files` that we didn't use are dependencies of the one we did use. They were pulled down automatically and can be ignored.

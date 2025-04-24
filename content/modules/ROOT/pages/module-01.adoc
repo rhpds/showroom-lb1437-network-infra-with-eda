@@ -1,17 +1,17 @@
 = Lab Setup
 
 [#codeserver]
-== Accessing code-server
+== Accessing VSCode
+
+NOTE: *It's highly recommended to put your workbench in its own browser window, in order to have these instructions on one half of your screen and the workbench on the other.*
 
 When you get assigned your student workbench, you will have a couple links available to you. For now, we are only interested in the “VS Code access” section, similar to what’s shown below:
 
 image::0_vscode.png[vscode]
 
-NOTE: Please ignore any links at the top of the page to the exercises/deck as these are for a different workshop; we are just borrowing the lab setup from it.
-
 Click on the WebUI link to access the VSCode environment. Once you are in:
 
-1. Go to File > Open Folder… and choose /home/student (this should be filled in by default), click OK.  
+1. Go to File > Open Folder… and select `/home/student/ansible-cisco-telemetry/` (the default is `/home/student/` so be sure to click on `ansible-cisco-telemetry` in the center pop-up to fill in the rest), click OK.  
 2. The page reloads. You can select “Yes, I trust the authors”.  
 3. Go to Terminal > New Terminal
 
@@ -19,12 +19,10 @@ You should now have a screen that looks like this:
 
 image::1_code-server.png[code-server]
 
-You may want to utilize your browser’s zoom function at this point to be able to see the text more clearly.
-
 [#connect]
 == Router connectivity and existing configurations
 
-In your terminal, test that you can SSH to rtr1 and rtr2. While logged in, find out the IOS-XE version being used and view their BGP configurations (commands to do that are provided below). You should not be prompted for a password as SSH keys have been set up ahead of time.
+In your terminal, test that you can SSH to rtr1. You should not be prompted for a password as SSH keys have been set up ahead of time.
 
 [source,bash,role=execute]
 ----
@@ -36,24 +34,77 @@ ssh rtr1
 show version
 ----
 
-On the first output line you should see:
+TIP: Press [Space] a few times to get through all the output.
 
-`Cisco IOS XE Software, Version 17.14.01a`
+There are a couple of lines in this output worth noting:
 
-Then:
-
-`show running-config | sec router bgp`
-
-You should see:
-
-[source,textinfo]
+[source]
 ----
-router bgp 65000  
-bgp router-id 192.168.1.1  
-bgp log-neighbor-changes  
-neighbor 10.200.200.2 remote-as 65001  
-neighbor 10.200.200.2 ebgp-multihop 255  
+Cisco IOS XE Software, Version 17.14.01a
+[...]
+cisco C8000V (VXE) processor (revision VXE) with 1955292K/3075K bytes of memory.
 [...]
 ----
 
-Exit and repeat for rtr2. The BGP configuration will be slightly different.
+We can see that we are working with a virtual Cisco 8000V router running IOS-XE 17.14.01a.
+
+We'll also look at some configuration that has been pre-applied.
+
+Run the following command:
+[source,role=execute]
+----
+show running-config interface Tunnel0
+----
+
+You should see (your `tunnel destination` IP may be different):
+[source]
+----
+rtr1#show running-config interface Tunnel0
+Building configuration...
+
+Current configuration : 184 bytes
+!
+interface Tunnel0
+ ip address 10.100.100.1 255.255.255.0
+ ip mtu 1476
+ ip tcp adjust-mss 1360
+ ip ospf 1 area 0
+ tunnel source GigabitEthernet1
+ tunnel destination 172.16.73.13
+end
+----
+
+This shows us that there is an interface on `rtr1` called `Tunnel0` that is involved in OSPF. The OSPF and interface configurations have already been applied.
+
+Next, run:
+[source,role=execute]
+----
+show running-config | section router bgp
+----
+
+You should see:
+
+[source]
+----
+rtr1#show running-config | section router bgp
+router bgp 65000
+ bgp router-id 192.168.1.1
+ bgp log-neighbor-changes
+ timers bgp 5 15
+ neighbor 10.200.200.2 remote-as 65001
+ neighbor 10.200.200.2 ebgp-multihop 255
+[truncated]
+----
+
+This shows us that there is BGP configuration on `rtr1` that has also already been applied.
+
+We'll work with these pre-applied configurations later.
+
+Exit your SSH session before moving on.
+
+[source,role=execute]
+----
+exit
+----
+
+If desired, repeat these steps on `rtr2`. You should see similar, but slightly different, configurations applied there.

@@ -1,11 +1,29 @@
 = {lab_name}
 
+=== Lab Access
+
+To access lab resources, go to: {lab_url}
+
+You will be prompted for a password, which is: *{lab_password}*
+
+Next, you will be prompted for your name and email address. The values you submit here will be used to get you back into your same environment if anything happens with your PC.
+
+When you reach the "Workbench Information" screen, you are ready to move on.
+
 === Lab Topology
 
 This is the environment you will be working in:
 
 image::00_topology.png[topology]
 
-=== Lab Access
+We will primarily be working with `rtr1`, and sometimes `rtr2`. We are not going to log into `rtr3`, but it's relevant in that it's the OSPF neighbor for `rtr1`. We are not using `rtr4`.
 
-todo
+All 4 devices are Cisco routers running IOS-XE.
+
+If you're unfamiliar, OSPF (Open Shortest Path First) and BGP (Border Gateway Protocol) are common routing protocols. Knowledge of how OSPF and BGP work is not required to participate in this lab.
+
+=== Lab Code
+
+The code base used in this lab, for your reference, can be found at: https://github.com/zjpeterson/ansible-cisco-telemetry
+
+You don't need this URL for anything in the lab; it is already cloned for you.
