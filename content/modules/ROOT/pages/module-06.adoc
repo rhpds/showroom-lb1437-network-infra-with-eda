@@ -141,7 +141,7 @@ Expected output:
 
 [source]
 ----
-[student@ansible-1 ansible-cisco-telemetry]$ ansible-navigator run playbooks/configure_ios_telemetry.yml
+[student@ansible-1 telemetry]$ ansible-navigator run playbooks/configure_ios_telemetry.yml
 
 PLAY [Configure IOS telemetry] ******************************************************
 
@@ -276,7 +276,7 @@ You should see the playbook run. If you don't catch it live, remember that previ
 
 [source]
 ----
-[student@ansible-1 ansible-cisco-telemetry]$ ansible-rulebook --rulebook rulebooks/routing_status_cli.yml -i inventory
+[student@ansible-1 telemetry]$ ansible-rulebook --rulebook rulebooks/routing_status_cli.yml -i inventory
 
 PLAY [Configure IOS Routing] ***************************************************
 

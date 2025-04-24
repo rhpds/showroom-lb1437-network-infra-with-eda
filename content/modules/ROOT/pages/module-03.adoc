@@ -138,7 +138,7 @@ TIP: It takes some time for the NETCONF listener to come up from the previous st
 The output should look like:
 [source]
 ----
-[student@ansible-1 ansible-cisco-telemetry]$ ansible-navigator run playbooks/yang_info.yml
+[student@ansible-1 telemetry]$ ansible-navigator run playbooks/yang_info.yml
 
 PLAY [Identify YANG modules] *******************************************************************************************************************
 

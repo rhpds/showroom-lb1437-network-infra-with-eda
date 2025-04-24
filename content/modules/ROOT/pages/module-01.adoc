@@ -13,7 +13,7 @@ Click on the WebUI link to access the VSCode environment. You will be prompted f
 
 Once you are in:
 
-1. Go to File > Open Folder… and select `/home/student/ansible-cisco-telemetry/` (the default is `/home/student/` so be sure to click on `ansible-cisco-telemetry` in the center pop-up to fill in the rest), click OK.  
+1. Go to File > Open Folder… and select `/home/student/telemetry/` (the default is `/home/student/` so be sure to click on `telemetry` in the center pop-up to fill in the rest), click OK.  
 2. The page reloads. You can select “Yes, I trust the authors”.  
 3. Go to Terminal > New Terminal
 
