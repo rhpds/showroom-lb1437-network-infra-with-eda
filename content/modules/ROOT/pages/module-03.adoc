@@ -126,7 +126,12 @@ exit
 
 Next, in your file explorer, under `playbooks`, take a look at the playbook `yang_info.yml`.
 
-This playbook targets `rtr1` and has two tasks. The first pulls down a list of all YANG models that the target device says it can support. The second searches that list for a term supplied in the variable `search_for`. That variable's value is set to "interface". Therefore, what you should see when you run this playbook, is a list of YANG models suported by `rtr1` that are related to configuring or monitoring interfaces. Go ahead and run it.
+This playbook targets `rtr1` and has two tasks.
+
+* The first task pulls down a list of all YANG models that the target device says it can support.
+* The second task searches that list for a term supplied in the variable `search_for`. That variable's value is set to "interface". Therefore, what you should see when you run this playbook, is a list of YANG models suported by `rtr1` that are related to configuring or monitoring interfaces.
+
+Go ahead and run it.
 
 [source,bash,role=execute]
 ----
@@ -173,7 +178,10 @@ Now that we have the name of the module we want to work with, we need to determi
 
 In your file explorer, under `playbooks`, take a look at the playbook `yang_fetch.yml`.
 
-Like before, this playbook targets `rtr1` and has two tasks. The first pulls down the YANG model file for the model specified in the `model` variable. You can see that's set to "Cisco-IOS-XE-interfaces-oper" which we just determined using the previous playbook. The model file will be stored locally for you to work with. The second task reads that model file and produces a tree schema, which we can read more easily than the model file itself.
+Like before, this playbook targets `rtr1` and has two tasks.
+
+* The first task downloads the YANG file for the model specified in the `model` variable. You can see that's set to "Cisco-IOS-XE-interfaces-oper" which we just determined using the previous playbook. The model file will be stored locally for you to work with.
+* The second task reads the model file downloaded by the first task and produces a tree schema, which we can read more easily than the model file itself.
 
 [NOTE]
 ====
