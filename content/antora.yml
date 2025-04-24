@@ -1,11 +1,13 @@
 name: modules
-title: Self-Healing Network Infrastructure with Event-Driven Ansible
+title: Lab Guide
 version: master
 nav:
   - modules/ROOT/nav.adoc
 
 asciidoc:
   attributes:
+    lab_url: https://dssc7.devel.opentlc.com/
+    lab_password: undefined
     lab_name: "LB1437 - Self-Healing Network Infrastructure with Event-Driven Ansible"
     release-version: master
     page-pagination: true
