@@ -16,7 +16,7 @@ This playbook will have the job of configuring all our Cisco devices to send tel
  ** `telemetry_grpc_port` - We know from Exercise 3.1 that Telegraf is listening on port *8089*.
  ** `telemetry_nodes` - We know from Exercise 3.2 that the YANG node we want to listen for has prefix `interfaces-ios-xe-oper` and xpath `interfaces`.
 * The first task: Enables the use of YANG on the device (we did this already for rtr1 but not rtr2).
-* The second task: Creates push subscriptions to all the YANG nodes described in the `telemetry_nodes` variable.
+* The second task: Creates push subscriptions to all the YANG nodes described in the `telemetry_nodes` variable. The line `update-policy periodic 3000` is counting in **centiseconds**, so we'll expect a message every 30 seconds.
 
 Go ahead and run the playbook:
 
@@ -58,7 +58,7 @@ sudo docker exec -it broker kafka-console-consumer --bootstrap-server localhost:
 
 NOTE: This is the same command from earlier, but with a couple addons. This is to help us filter out messages that are relevant to what we're doing, and persist to a file so we can more easily inspect the messages.
 
-Wait for a message to appear in your terminal. It may take up to 30 seconds. Once one does, pres CTRL+C a couple times to stop the listener.
+Wait for a message to appear in your terminal. It may take up to 30 seconds. Once one does, pres CTRL+C a few times to stop the listener.
 
 You should now have an `interface.json` file available in your file explorer. Open it so that we can see how the data is being formatted by Telegraf.
 
@@ -86,9 +86,11 @@ Your file should look like the following (some sections removed for brevity):
 }
 ----
 
+TIP: You might actually get two of these messages because of a sync condition with Telegraf (if you check the timestamps, they will be 30 seconds apart). You may ignore the second message.
+
 This is information about `Tunnel0`, the interface we were looking at previously, arranged in JSON format. It looks like `fields.admin_status` will be a good data point to use, and its normal value is "if-state-up". It also looks like we can use `tags.name` to identify that the message is about `Tunnel0` specifically, which will be useful since the subscription we set up is sending messages about every interface the router has.
 
-NOTE: If you recall looking at the YANG tree in Exercise 3.2, you may notice that all the data available here matches up with that.
+NOTE: If you recall looking at the YANG tree `Cisco-IOS-XE-interfaces-oper.tree` in Exercise 3.2, you may notice that all the data available here matches up with that.
 
 [#rulebook]
 == Using ansible-rulebook

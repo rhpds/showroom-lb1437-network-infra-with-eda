@@ -15,7 +15,7 @@
 ** xref:module-04.adoc#rulebook[4.2. Using ansible-rulebook]
 
 * xref:module-05.adoc[5. Ansible Automation Platform]
-** xref:module-05.adoc#controller[5.1. Configuring Automation Controller]
+** xref:module-05.adoc#controller[5.1. Configuring Ansible Automation Platform]
 ** xref:module-05.adoc#eda[5.2. Configuring Event-Driven Ansible Controller]
 
 * xref:module-06.adoc[6. Extend the scope]

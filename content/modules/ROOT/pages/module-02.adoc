@@ -46,7 +46,7 @@ We should see the first task report `ok` - so nothing changed. But the in the se
 changed: [rtr1] \=> {"after": {"as_number": "65000", "bgp": {"default": {"ipv4_unicast": true, "route_target": {"filter": true}}, "log_neighbor_changes": true, "router_id": {"address": "192.168.1.1"}}, "neighbors": [{"neighbor_address": "10.200.200.2", "remote_as": "65001"}]}, "before": {"as_number": "65000", "bgp": {"default": {"ipv4_unicast": true, "route_target": {"filter": true}}, "log_neighbor_changes": true, "router_id": {"address": "192.168.1.1"}}, "neighbors": [{"neighbor_address": "10.200.200.2", "remote_as": "65001"}]}, "changed": true, "commands": ["router bgp 65000", "timers bgp 5 15"]}
 ----
 
-Refer to the `commands` output at the end (scroll right in the box above) to see that the resource module was able to figure out which commands needed to be run to accomplish the configuration, even though our configuration data is stored as YAML. We were only missing the `timers` part. This is for the lab so that BGP can more quickly tell when something is wrong, and we'll be making use of that later.
+Refer to the `commands` output at the end (scroll all the way right in the box above) to see that the resource module was able to figure out which commands needed to be run to accomplish the configuration, even though our configuration data is stored as YAML. We were only missing the `timers` part. This is for the lab so that BGP can more quickly tell when something is wrong, and we'll be making use of that later.
 
 Run the playbook again and drop the verbosity:
 
@@ -152,6 +152,25 @@ ansible-navigator run playbooks/configure_ios_routing.yml
 ----
 
 We should get `changed` reported only on rtr1 and only on the interface configuration task.
+
+[source]
+----
+[student@ansible-1 telemetry]$ ansible-navigator run playbooks/configure_ios_routing.yml
+
+PLAY [Configure IOS Routing] **********************************************************************************
+
+TASK [Apply interfaces config] ********************************************************************************
+ok: [rtr2]
+changed: [rtr1]
+
+TASK [Apply BGP Global config] ********************************************************************************
+ok: [rtr1]
+ok: [rtr2]
+
+PLAY RECAP ****************************************************************************************************
+rtr1                       : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+rtr2                       : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+----
 
 SSH back into rtr1 and check the interface state again.
 

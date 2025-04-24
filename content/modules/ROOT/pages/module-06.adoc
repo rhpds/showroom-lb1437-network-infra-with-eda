@@ -5,7 +5,7 @@ At this point, we have a functioning Event-Driven Ansible environment, fully cap
 [#bgp-yang]
 == BGP: YANG prefix and xpath 
 
-Switch back to your VSCode tab. In the file explorer, under `playbooks`, let's revisit the playbook `yang_info.yml`.
+We'll start in your VSCode tab. In the file explorer, under `playbooks`, let's revisit the playbook `yang_info.yml`.
 
 The last time we ran this, we had the `search_for` variable set to "interface" and we picked a module from the list that had "oper" in the name. This time let's change the value to be "oper", which will show us every operational module available on `rtr1`.
 
@@ -72,7 +72,7 @@ ansible-navigator run playbooks/yang_fetch.yml
 
 The playbook will again create some files in `playbooks/yang_files`. We now have a couple new ones, including `Cisco-IOS-XE-bgp-oper.yang` and `Cisco-IOS-XE-bgp-oper.tree`.
 
-Click on `Cisco-IOS-XE-bgp-oper.yang` and as before, look for a line starting with "prefix". You should see:
+Click on `Cisco-IOS-XE-bgp-oper.yang` and as before, look for a line starting with "prefix". On line 4 you should see:
 
 ----
   prefix bgp-ios-xe-oper;
@@ -100,7 +100,7 @@ module: Cisco-IOS-XE-bgp-oper
 [truncated]
 ----
 
-We can see that under `bgp-state-data` is a key called `neighbors`, and under that is a key called `neighbor`, and under that is some promising-looking data about BGP state. We'll remember the path *bgp-state-data/neighbors*.
+We can see that under `bgp-state-data` is a key called `neighbors`, and under that is a key called `neighbor`, and under that is some promising-looking data about BGP state. We'll remember the xpath *bgp-state-data/neighbors*.
 
 [#bgp-tele]
 == BGP: Configuring and testing telemetry
@@ -128,7 +128,7 @@ Lines 8-12 in the playbook should be changed to look like:
         xpath: bgp-state-data/neighbors
 ----
 
-TIP: Be careful with the spacing. It should look exactly like the above block, with the `-` characters aligned. You may want to copy the whole block and paste it over the existing lines.
+TIP: Be careful with the spacing. It should look exactly like the above block, with the `-` characters aligned. You may want to copy the whole block and paste it over the existing lines 8-10.
 
 Once edited, run the playbook:
 
@@ -195,7 +195,9 @@ Now in your terminal, we want to validate that BGP-related messages are appearin
 sudo docker exec -it broker kafka-console-consumer --bootstrap-server localhost:9092 --topic eda | jq 'select(.name | contains("bgp"))' | tee bgp.json
 ----
 
-You may have to wait up to 30 seconds for the next message to appear. As soon as it does, you can press CTRL+C a couple times to end the monitoring. You'll have a new file called `bgp.json` visible in your file explorer. Open it to see the whole Kafka message.
+You may have to wait up to 30 seconds for the next message to appear. As soon as it does, you can press CTRL+C a few times to end the monitoring.
+
+You'll have a new file called `bgp.json` visible in your file explorer. Open it to see the whole Kafka message.
 
 NOTE: As before, the data here matches what can be found in the `Cisco-IOS-XE-bgp-oper.tree` file from earlier.
 
@@ -204,7 +206,9 @@ We'll need to choose something in this message to use to detect a bad BGP state.
 [#bgp-cli]
 == BGP: Event-Driven Ansible on the command line
 
-In your student workbench, open the file `rulebooks/routing_status_cli.yml`. This file should look familiar. You can open the rulebook we used earlier, `rulebooks/interface_status_cli.yml`, and see that the two files are almost identical. This new rulebook has one change, which is the addition of another rule under the `rules` block. The action in the new rule is also the same, since the playbook we've been using applies both interface and BGP configurations.
+In your student workbench, open the file `rulebooks/routing_status_cli.yml`.
+
+This file should look familiar. You can open the rulebook we used earlier, `rulebooks/interface_status_cli.yml`, and see that the two files are almost identical. This new rulebook has one change, which is the addition of another rule under the `rules` block. The action in the new rule is also the same, since the playbook we've been using applies both interface and BGP configurations.
 
 The intent is that we will run this rulebook instead of the one we were useing earlier, since it represents a more complete coverage of our routing configuration, and the source (Kafka topic "eda") is identical.
 
@@ -274,6 +278,8 @@ Now swap back to your `ansible-rulebook` (python3) terminal.
 
 You should see the playbook run. If you don't catch it live, remember that previously there was no output. Therefore, if you see anything after your `ansible-rulebook` command, then it was the result of what you just did.
 
+Example output:
+
 [source]
 ----
 [student@ansible-1 telemetry]$ ansible-rulebook --rulebook rulebooks/routing_status_cli.yml -i inventory
@@ -321,7 +327,7 @@ Now we will re-make the Rulebook Activation. Click on the blue "Create rulebook 
 | *Rulebook*
 | routing_status_aap.yml
 
-| *Credentials*
+| *Credential*
 | Automation Controller
 
 | *Decision environment*
@@ -357,7 +363,7 @@ image::11_bgp-aap.png[bgp-aap]
 
 This matches what we saw on the CLI, so our new BGP monitoring is working correctly. Let's also test that the interface monitoring is still working.
 
-In the left side navigation, go to *Automation Execution > Jobs* so that we are set up again to watch for new jobs. Then, switch back to your VSCore tab. You should still be in the SSH session with `rtr1` (if not, type `ssh rtr1`). Run the commands we previously used to shutdown `Tunnel0`:
+In the left side navigation, go to *Automation Execution > Jobs* so that we are set up again to watch for new jobs. Then, switch back to your VSCode tab. You should still be in the SSH session with `rtr1` (if not, type `ssh rtr1`). Run the commands we previously used to shutdown `Tunnel0`:
 
 [source,role=execute]
 ----
@@ -367,7 +373,7 @@ shutdown
 end
 ----
 
-Swap back to your AAP tab and watch for a new instance of "Router configuration" to kick off. Once it does, click on it to monitor the progress.
+Switch back to your AAP tab and watch for a new instance of "Router configuration" to kick off. Once it does, click on it to monitor the progress.
 
 You should see:
 

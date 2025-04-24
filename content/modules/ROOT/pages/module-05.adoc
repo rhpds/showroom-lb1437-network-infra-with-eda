@@ -3,9 +3,9 @@
 With everything built and working on the command line, let's move our workload into Ansible Automation Platform.
 
 [#controller]
-== Configuring Automation Controller
+== Configuring Ansible Automation Platform
 
-Back in Exercise 1.1 we had two links from the student assignment, one for VS Code and another for Automation Controller. Now we will click the Ansible Automation Platform link and login with the information listed under the link.
+Back in Exercise 1.1 we had two links from the student workbench assignment, one for VS Code and another for Ansible Automation Platform. Now we will click the Ansible Automation Platform link and login with the information listed under the link.
 
 You are looking for something that looks like this:
 
@@ -35,19 +35,19 @@ Fill out the form with the information below:
 | *Playbook*
 | playbooks/configure_ios_routing.yml
 
-| *Credentials*
-| Workshop Credential \| Machine
-
 | *Execution environment*
 | network workshop execution environment
+
+| *Credentials*
+| Workshop Credential \| Machine
 
 | *Extra variables*
 | Check `Prompt on launch` box
 |===
 
-When this information is entered, click the `Save job template` button.
+When this information is entered, click the `Create job template` button at the bottom of the screen.
 
-At the top of the screen, click on the `Launch template` button.
+At the top of the next screen that appears, click on the `Launch template` button.
 
 image::7_launch.png[Launch]
 
@@ -78,21 +78,23 @@ Similar to what you did for the Job Template, fill out the form with the informa
 | *Rulebook*
 | interface_status_aap.yml
 
-| *Credentials*
+| *Credential*
 | Automation Controller
 
 | *Decision environment*
 | Quay DE
 |===
 
-Everything else can be left empty or default. Click the `Create rulebook activation` button.
+Everything else can be left empty or default. Click the `Create rulebook activation` button at the bottom of the screen.
 
 Two things to highlight here:
 
 * The rulebook `interface_status_aap.yml` is the same as the rulebook `interface_status_cli.yml` that you ran earlier on the command line with one key difference: The action is to kick off a Job Template (the one you just made). This is the reason why you need the `Automation Controller` credential.
 * We are using a Decision Environment, which is like an Execution Environment, but for use with Event-Driven Ansible.
 
-The Rulebook Activation will try to start. As before, with the new environment you'll need to wait for it to pull the Decision Environment image, but after about a minute you should see `Activation status` change to `Running`. At the top of the screen, click on the `History` tab, then click on the `1 - Interface status` link. Here is where we can see the ansible-rulebook log and verify that everything came up with no errors.
+The Rulebook Activation will try to start. As before, with the new environment you'll need to wait for it to pull the Decision Environment image, but after about a minute you should see `Activation status` change to `Running`.
+
+At the top of the screen, click on the `History` tab, then click on the `1 - Interface status` link. Here is where we can see the ansible-rulebook log and verify that everything came up with no errors.
 
 As before, we want to break the router config to see it get fixed. Switch back to your VSCode tab and ssh to rtr1 to do so. The commands again are:
 
@@ -106,14 +108,31 @@ ssh rtr1
 configure terminal
 interface Tunnel0
 shutdown
+end
 ----
 
-Switch back to your AAP tab. In the left side navigation, under Automation Decisions, click on Rule Audit. Depending on how quick you were, you'll either already see an entry on this page, or one will appear shortly. Once available, click on `Re-apply config when interface not up` (which is the name of the rule in the rulebook).
+Switch back to your AAP tab. In the left side navigation, under Automation Decisions, click on Rule Audit. Depending on how quick you were, you'll either already see an entry on this page, or one will appear shortly.
 
-On the page that appears, click on the `Events` tab. There should be one entry for ansible.eda.kafka. Click on it. The event details pop up, and we can see that we have the same data available to us as we did in Exercise 4.1. Click the `Close` button.
+Once available, click on `Re-apply config when interface not up` (which is the name of the rule in the rulebook).
+
+On the page that appears, click on the `Events` tab. There should be one entry for *ansible.eda.kafka*. Click on it. The event details pop up, and we can see that we have the same data available to us as we did in Exercise 4.1. Click the `Close` button.
 
 Click on the `Actions` tab. We can see a single entry `run_job_template`. Instead of clicking the link, in the left side navigation, click on *Automation Execution > Jobs*. You should see a second instance of "Router configuration" appear in the list with a very recent timestamp. Click on it to observe that the "Apply interfaces config" task reports `changed` just as it did before on the CLI.
 
 image::10_intf-changed.png[intf-changed]
 
+Switch back to your VSCode tab, where your SSH session to rtr1 should still be active. Verify that the interface came back up.
+
+[source,role=execute]
+----
+show ip interface brief
+----
+
 You now have AAP running the same Event-Driven workload as we developed on the command line.
+
+Exit your SSH session before moving on.
+
+[source,role=execute]
+----
+exit
+----

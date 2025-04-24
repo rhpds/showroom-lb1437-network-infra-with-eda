@@ -133,7 +133,7 @@ This playbook targets `rtr1` and has two tasks. The first pulls down a list of a
 ansible-navigator run playbooks/yang_info.yml
 ----
 
-TIP: It takes some time for the NETCONF listener to come up from the previous step. If you run the playbook too soon, it may time out or seem to be hanging. If that happens to you, press CTRL+C and try running the playbook again.
+TIP: It takes some time for YANG to become enabled from the previous step. If you run the playbook too soon, it may time out or seem to be hanging. If that happens to you, press CTRL+C and try running the playbook again.
 
 The output should look like:
 [source]
@@ -191,7 +191,7 @@ Once the playbook finishes, you should now have a `yang_files` directory that ha
 
 image::8_yang-files.png[yang files]
 
-Click on `Cisco-IOS-XE-interfaces-oper.yang` and look for a line starting with "prefix". You should see:
+Click on `Cisco-IOS-XE-interfaces-oper.yang` and look for a line starting with "prefix". On line 4 you should see:
 
 ----
   prefix interfaces-ios-xe-oper;

@@ -17,6 +17,8 @@ Once you are in:
 2. The page reloads. You can select “Yes, I trust the authors”.  
 3. Go to Terminal > New Terminal
 
+TIP: If you don't see a "Terminal" option at the top, it may be cut off due to a small window. You can access the Terminal menu by clicking the 3 dots `...` to the right.
+
 You should now have a screen that looks like this: 
 
 image::1_code-server.png[code-server]
@@ -24,7 +26,7 @@ image::1_code-server.png[code-server]
 [#connect]
 == Router connectivity and existing configurations
 
-In your terminal, test that you can SSH to rtr1. You should not be prompted for a password as SSH keys have been set up ahead of time.
+In your terminal at the bottom of the screen, test that you can SSH to rtr1. You should not be prompted for a password as SSH keys have been set up ahead of time.
 
 [source,bash,role=execute]
 ----
@@ -58,7 +60,7 @@ Run the following command:
 show running-config interface Tunnel0
 ----
 
-You should see (your `tunnel destination` IP may be different):
+You should see:
 [source]
 ----
 rtr1#show running-config interface Tunnel0
@@ -71,9 +73,7 @@ interface Tunnel0
  ip mtu 1476
  ip tcp adjust-mss 1360
  ip ospf 1 area 0
- tunnel source GigabitEthernet1
- tunnel destination 172.16.73.13
-end
+[truncated]
 ----
 
 This shows us that there is an interface on `rtr1` called `Tunnel0` that is involved in OSPF. The OSPF and interface configurations have already been applied.
