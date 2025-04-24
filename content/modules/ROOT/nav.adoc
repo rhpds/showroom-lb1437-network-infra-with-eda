@@ -1,5 +1,5 @@
 * xref:module-01.adoc[1. Lab Setup]
-** xref:module-01.adoc#codeserver[1.1. Accessing code-server]
+** xref:module-01.adoc#codeserver[1.1. Accessing VSCode]
 ** xref:module-01.adoc#connect[1.2. Router connectivity and existing configurations]
 
 * xref:module-02.adoc[2. Explore environment and BGP configuration]
@@ -19,3 +19,7 @@
 ** xref:module-05.adoc#eda[5.2. Configuring Event-Driven Ansible Controller]
 
 * xref:module-06.adoc[6. Extend the scope]
+** xref:module-06.adoc#bgp-yang[6.1. BGP: YANG prefix and xpath ]
+** xref:module-06.adoc#bgp-tele[6.2. BGP: Configuring and testing telemetry]
+** xref:module-06.adoc#bgp-cli[6.3. BGP: Event-Driven Ansible on the command line]
+** xref:module-06.adoc#bgp-aap[6.4. BGP: Event-Driven Ansible in AAP]
