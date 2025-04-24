@@ -5,7 +5,7 @@ With everything built and working on the command line, let's move our workload i
 [#controller]
 == Configuring Automation Controller
 
-Back in Exercise 1.1 we had two links from the student assignment, one for VS Code and another for Automation Controller. Now we will click the Automation Controller link and login with the information listed under the link.
+Back in Exercise 1.1 we had two links from the student assignment, one for VS Code and another for Automation Controller. Now we will click the Ansible Automation Platform link and login with the information listed under the link.
 
 You are looking for something that looks like this:
 
