@@ -21,9 +21,3 @@ We will primarily be working with `rtr1`, and sometimes `rtr2`. We are not going
 All 4 devices are Cisco routers running IOS-XE.
 
 If you're unfamiliar, OSPF (Open Shortest Path First) and BGP (Border Gateway Protocol) are common routing protocols. Knowledge of how OSPF and BGP work is not required to participate in this lab.
-
-=== Lab Code
-
-The code base used in this lab, for your reference, can be found at: https://github.com/zjpeterson/ansible-cisco-telemetry
-
-You don't need this URL for anything in the lab; it is already cloned for you.
