@@ -3,7 +3,7 @@
 [#codeserver]
 == Accessing VSCode
 
-NOTE: *It's highly recommended to put your workbench in its own browser window, in order to have these instructions on one half of your screen and the workbench on the other.*
+IMPORTANT: It's highly recommended to put your workbench in its own browser window, in order to have these instructions on one half of your screen and the workbench on the other.
 
 When you get assigned your student workbench, you will have a couple links available to you. For now, we are only interested in the “VS Code access” section, similar to what's shown below:
 
@@ -17,7 +17,14 @@ Once you are in:
 2. The page reloads. You can select “Yes, I trust the authors”.  
 3. Go to Terminal > New Terminal
 
-TIP: If you don't see a "Terminal" option at the top, it may be cut off due to a small window. You can access the Terminal menu by clicking the 3 dots `...` to the right.
+[TIP]
+====
+If you don't see a "Terminal" option at the top of the screen, it may be cut off due to a small window. 
+
+If you see *File*, *Edit*, etc. but no *Terminal*: You can access the Terminal menu by clicking the 3 dots `...` to the right of the options you have.
+
+If you don't see *File*, *Edit*, etc. at all: You can access these menus by clicking the 3 lines in the upper left.
+====
 
 You should now have a screen that looks like this: 
 
