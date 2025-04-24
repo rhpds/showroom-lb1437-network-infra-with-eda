@@ -2,7 +2,7 @@
 ** xref:module-01.adoc#codeserver[1.1. Accessing VSCode]
 ** xref:module-01.adoc#connect[1.2. Router connectivity and existing configurations]
 
-* xref:module-02.adoc[2. Explore environment and BGP configuration]
+* xref:module-02.adoc[2. Explore environment and router configuration]
 ** xref:module-02.adoc#baseline[2.1. Applying baseline configuration]
 ** xref:module-02.adoc#recover[2.2. Recovering from a misconfiguration]
 
