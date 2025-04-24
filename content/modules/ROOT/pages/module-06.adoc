@@ -301,7 +301,7 @@ Switch to your AAP tab. You will most likely need to log in again.
 
 In the left side navigation, go to *Automation Decisions > Rulebook Activations*. Your "Interface status" activation from earlier should still be running. On the far right side, click the 3 dots and select "Delete rulebook activation".
 
-image::10_activation-delete.png[activation-delete]
+image::12_activation-delete.png[activation-delete]
 
 Confirm that you want to delete the  activation by checking the box next to "Interface status" and clicking the "Delete rulebook activations" button. Click the Close button on the dialog that follows.
 
