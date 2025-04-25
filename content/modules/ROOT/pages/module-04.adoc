@@ -1,6 +1,6 @@
 = Implement Event-Driven Ansible
 
-With the pieces all in place, and all the information gathered, we can now start to put it all together.
+With the pieces all in place, and all the information gathered, we can now start to realize the vision of having Ansible autonomously recover from misconfigurations.
 
 [#ios]
 == IOS configuration
@@ -38,7 +38,7 @@ ssh rtr1
 show telemetry ietf subscription 1
 ----
 
-You may initially see a `Schema currently not available` message if you were quick, but eventually we should see this output:
+You should see:
 
 ----
 ID         Type       State      State Description
@@ -87,7 +87,7 @@ Your file should look like the following (some sections removed for brevity):
 }
 ----
 
-TIP: You might actually get two of these messages because of a sync condition with Telegraf (if you check the timestamps, they will be 30 seconds apart). You may ignore the second message.
+TIP: You might actually get two of these messages because of a sync condition with Telegraf (if you check the timestamps, they will be 30 seconds apart). You can ignore the second message.
 
 This is information about `Tunnel0`, the interface we were looking at previously, arranged in JSON format. It looks like `fields.admin_status` will be a good data point to use, and its normal value is "if-state-up". It also looks like we can use `tags.name` to identify that the message is about `Tunnel0` specifically, which will be useful since the subscription we set up is sending messages about every interface the router has.
 
@@ -134,7 +134,7 @@ shutdown
 end
 ----
 
-Now, switch back to your `ansible-rulebook` terminal (using the navigation on the right side of the terminal - the right one will be labeled `python3` any time `ansible-rulebook` is running) and observe.
+Now, switch back to your `ansible-rulebook` terminal (using the navigation on the right side of the terminal - the correct one will be labeled `python3` any time `ansible-rulebook` is running) and observe.
 
 You will need to wait up to 30 seconds for the next Kafka message to come in, but once it does, you should see the playbook run. When it runs, you should observe a couple things:
 

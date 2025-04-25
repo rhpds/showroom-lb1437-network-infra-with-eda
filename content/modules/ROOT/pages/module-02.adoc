@@ -1,6 +1,11 @@
-= Explore environment and router configuration
+= Network configuration with Ansible
 
-We will be using Network Resource Modules, which differ from other module designs you may have worked with in Ansible.
+It's the next morning, and even though our (most recent) crisis has been averted, the way you fixed that router wasn't sustainable. We can do better than manually copying and pasting configs in the middle of the night.
+
+[#iac]
+== Infrastructure as Code
+
+We'll be making use of Network Resource Modules, which differ from other module designs you may have worked with in Ansible.
 
 [NOTE]
 ====
@@ -23,10 +28,7 @@ This is a playbook that applies a minimal configuration to a router in our lab. 
  ** The module inputs are very minimal, as they reference variable data. This data can be found under the `host_vars` directory within `playbooks`.
  ** Take a moment to expand the `host_vars` directory, then expand `rtr1` and/or `rtr2`. Each resource has its own file. The files relevant to us right now are `bgp_global.yml` and `interfaces.yml` since they contain the variables used in our playbook. Collapse `host_vars` again before moving on.
 
-This playbook and its resource data represent an *Infrastructure as Code* approach to managing the configuration on our two routers. This will be our *source of truth* for this lab's network configuration. In other words, we want to treat this code as the definitive answer to what the router configurations should be, regardless of what's currently applied.
-
-[#baseline]
-== Applying baseline configuration
+This playbook and its resource data represent an *Infrastructure as Code* approach to managing the configuration on our two routers. This will be our *source of truth* for this lab's network configuration. In other words, we want to treat this code as the definitive answer to what the router configurations should be, regardless of what's currently applied. If you want to make a change, you modify the source of truth, not the device directly.
 
 Let's run this playbook a couple of times.
 
@@ -36,8 +38,6 @@ For our first run, use the following command (using `-vv` for verbosity level 2)
 ----
 ansible-navigator run playbooks/configure_ios_routing.yml -vv
 ----
-
-TIP: Your first run will take a moment to spin up.
 
 We should see the first task report `ok` - so nothing changed. But the in the second task's output, you should see something like below:
 
@@ -197,5 +197,3 @@ Exit your SSH session before moving on.
 ----
 exit
 ----
-
-NOTE: We are doing this work on a router and working with routing protocols, but as you work through the lab, consider how this could also apply to switches. The way we are working with interfaces in this lab would be no different.

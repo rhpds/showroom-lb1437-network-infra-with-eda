@@ -23,10 +23,10 @@ asciidoc:
     - url: https://access.redhat.com/support/articles/ansible-automation-platform-certified-content
       text: Certified and Validated Content
     - url: https://github.com/zjpeterson/ansible-cisco-telemetry
-      text: Lab Repository
+      text: Lab Code Repository
     - url: https://www.cisco.com/c/en/us/products/collateral/switches/catalyst-9300-series-switches/model-driven-telemetry-wp.html
       text: Cisco MDT Whitepaper
-    - url: https://docs.influxdata.com/telegraf/v1/
-      text: Telegraf Documentation
+    - url: https://www.influxdata.com/time-series-platform/telegraf/
+      text: Telegraf | InfluxData
     - url: https://kafka.apache.org/intro
       text: Kafka Introduction

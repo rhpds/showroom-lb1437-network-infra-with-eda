@@ -1,13 +1,19 @@
-= Lab Setup
+= Getting Started
+
+You're the network engineer on call for a critical network infrastructure — the kind where a single bad config can knock out branch connectivity and trigger a flood of support tickets. It's 3AM. A routine router change just broke something important, and even though you have it handled this time, wouldn't it be nice to never wake up at this hour for this kind of thing ever again...?
+
+In this lab, you'll lay the groundwork to move from reactive fixes like these to proactive, event-driven automation.
 
 [#codeserver]
 == Accessing VSCode
 
 IMPORTANT: It's highly recommended to put your workbench in its own browser window, in order to have these instructions on one half of your screen and the workbench on the other.
 
-When you get assigned your student workbench, you will have a couple links available to you. For now, we are only interested in the “VS Code access” section, similar to what's shown below:
+When you get assigned your student workbench, you will have a couple links available to you. For now, we are only interested in the “VS Code access” section, similar to below (your details will be different from what's shown here):
 
 image::0_vscode.png[vscode]
+
+NOTE: Visual Studio Code (commonly referred to as *VSCode*) is a free development environment from Microsoft. In this lab you're actually using `code-server` (so that you can use it in a web browser) but we'll still refer to it as VSCode in these instructions. Red Hat recommends using VSCode for developing with Ansible, and publishes a supported https://marketplace.visualstudio.com/items?itemName=redhat.ansible[extension] for it.
 
 Click on the WebUI link to access the VSCode environment. You will be prompted for a password; use the one displayed on your assignment page.
 
@@ -19,7 +25,7 @@ Once you are in:
 
 [TIP]
 ====
-If you don't see a "Terminal" option at the top of the screen, it may be cut off due to a small window. 
+If you don't see a "File" or "Terminal" option at the top of the screen, it may be cut off due to limited screen space. 
 
 If you see *File*, *Edit*, etc. but no *Terminal*: You can access the Terminal menu by clicking the 3 dots `...` to the right of the options you have.
 

@@ -1,0 +1,38 @@
+= Wrap-up
+
+What started as a fire drill turned into a blueprint for resilient, automated operations.
+
+You didn't just fix a broken router, you:
+
+* Established a gold-standard configuration as code
+
+* Enabled real-time visibility with model-driven telemetry
+
+* Built an event-driven automation pipeline that turns reactive work into proactive response
+
+With these tools in place, your infrastructure is no longer fragile and reactive. It's self-healing, policy-driven, and (perhaps most importantly) much less likely to wake you up in the middle of the night.
+
+[#next]
+== What's next?
+
+There are many possible ways to use this technology that we didn't cover, such as:
+
+* Monitoring switch ports instead of router interfaces
+* Automatic triage of network conditions when an issue is detected, and putting the results in a ticket
+* Checking availability of downstream resources to determine issue severity
+
+Consider what you commonly see in your environment. You may want to use the lab environment to explore the possibilies.
+
+[#other]
+== Other network platforms
+
+This lab was on Cisco IOS-XE, but that's not the only network platform where this is possible.
+
+* Cisco NX-OS can use the same technology stack that we used in this lab. You can use YANG for the data source, but NX-API and DME are also available. There's even a dedicated module to configure telemetry: `cisco.nxos.telemetry`
+* Arista EOS can be polled by Telegraf over gNMI. https://aristanetworks.github.io/openmgmt/telemetry/adapters/kafka/[An example can be found here].
+* If you have an existing network monitoring tool such as https://catalog.redhat.com/software/collection/dynatrace/event_driven_ansible[Dynatrace], you may be able to plug it into Event-Driven Ansible
+
+[#more]
+== More resources
+
+The upper right corner of this page has a "Links" section, containing a number of references covering topics from the lab. If you have time, feel free to take a look at any that interest you.

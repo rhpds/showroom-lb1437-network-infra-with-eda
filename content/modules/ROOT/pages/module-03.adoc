@@ -6,14 +6,14 @@ Ultimately we are looking to establish this stack of components:
 
 image::13_component-stack.png[component-stack]
 
+[#telegraf]
+== Telegraf and Kafka
+
 *Telegraf* is an open-source metrics collection tool from InfluxData. We will be using it to collect telemetry messages from our routers and send it to Kafka. 
 
 *Kafka* is an open-source event streaming platform from Apache. We will be using it as a broker to get event data between Telegraf and Event-Driven Ansible.
 
-[#telegraf]
-== Telegraf and Kafka
-
-We will be using a Validated Content Collection in this section.
+We will be using a Validated Content Collection to make these tools available to us.
 
 [NOTE]
 ====
@@ -141,7 +141,7 @@ This playbook targets `rtr1` and has two tasks.
 * The first task pulls down a list of all YANG models that the target device says it can support.
 * The second task searches that list for a term supplied in the variable `search_for`. That variable's value is set to "interface". Therefore, what you should see when you run this playbook, is a list of YANG models suported by `rtr1` that are related to configuring or monitoring interfaces.
 
-Go ahead and run it.
+Go ahead and run it (once the previous playbook is done running).
 
 [source,bash,role=execute]
 ----
@@ -182,7 +182,7 @@ rtr1                       : ok=2    changed=0    unreachable=0    failed=0    s
 
 YANG can be used for both operational data as well as configuration data. We see both kinds of results in this output. For our telemetry purposes, we want YANG modules with "oper" in the name. It looks like `Cisco-IOS-XE-interfaces-oper` is what we want. We can take a note of that and move on.
 
-Now that we have the name of the module we want to work with, we need to determine *where* in the module the data we want is. Since YANG modules are expressed in an XML tree format, what we're looking for now will be an "xpath" (short for XML path).
+Now that we have the name of the module we want to work with, we need to determine where in the module the data we want is. Since YANG modules are expressed in an XML tree format, what we're looking for now will be an "xpath" (short for XML path).
 
 In your file explorer, under `playbooks`, take a look at the playbook `yang_fetch.yml`.
 
@@ -204,6 +204,8 @@ ansible-navigator run playbooks/yang_fetch.yml
 ----
 
 Once the playbook finishes, you should now have a `yang_files` directory that has been created under `playbooks`. Find this in your file explorer on the left and expand it. You should see some `.yang` files and a `.tree` file inside.
+
+TIP: You may need to widen the file explorer pane to be able to see the file extensions.
 
 image::8_yang-files.png[yang files]
 

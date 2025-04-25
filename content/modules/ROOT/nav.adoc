@@ -1,9 +1,9 @@
-* xref:module-01.adoc[1. Lab Setup]
+* xref:module-01.adoc[1. Getting Started]
 ** xref:module-01.adoc#codeserver[1.1. Accessing VSCode]
 ** xref:module-01.adoc#connect[1.2. Router connectivity and existing configurations]
 
-* xref:module-02.adoc[2. Explore environment and router configuration]
-** xref:module-02.adoc#baseline[2.1. Applying baseline configuration]
+* xref:module-02.adoc[2. Network configuration with Ansible]
+** xref:module-02.adoc#iac[2.1. Infrastructure as Code]
 ** xref:module-02.adoc#recover[2.2. Recovering from a misconfiguration]
 
 * xref:module-03.adoc[3. Telegraf, Kakfa, and YANG]
@@ -23,3 +23,8 @@
 ** xref:module-06.adoc#bgp-tele[6.2. BGP: Configuring and testing telemetry]
 ** xref:module-06.adoc#bgp-cli[6.3. BGP: Event-Driven Ansible on the command line]
 ** xref:module-06.adoc#bgp-aap[6.4. BGP: Event-Driven Ansible in AAP]
+
+* xref:module-07.adoc[7. Wrap-up]
+** xref:module-07.adoc#next[What's next?]
+** xref:module-07.adoc#other[Other network platforms]
+** xref:module-07.adoc#more[More resources]
