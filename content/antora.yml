@@ -26,3 +26,7 @@ asciidoc:
       text: Lab Repository
     - url: https://www.cisco.com/c/en/us/products/collateral/switches/catalyst-9300-series-switches/model-driven-telemetry-wp.html
       text: Cisco MDT Whitepaper
+    - url: https://docs.influxdata.com/telegraf/v1/
+      text: Telegraf Documentation
+    - url: https://kafka.apache.org/intro
+      text: Kafka Introduction
