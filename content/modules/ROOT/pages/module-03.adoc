@@ -6,9 +6,9 @@ Ultimately we are looking to establish this stack of components:
 
 image::13_component-stack.png[component-stack]
 
-*Telegraf* is an open source server agent that helps you collect metrics from your stacks, sensors, and systems. https://www.influxdata.com/time-series-platform/telegraf/[[InfluxData\]]
+*Telegraf* is an open-source metrics collection tool from InfluxData. We will be using it to collect telemetry messages from our routers and send it to Kafka. 
 
-*Kafka* is an open-source distributed event streaming platform used by thousands of companies for high-performance data pipelines, streaming analytics, data integration, and mission-critical applications. https://kafka.apache.org/[[Apache\]]
+*Kafka* is an open-source event streaming platform from Apache. We will be using it as a broker to get event data between Telegraf and Event-Driven Ansible.
 
 [#telegraf]
 == Telegraf and Kafka
@@ -58,7 +58,7 @@ NOTE: The use of port 8089 is specific to this lab environment. Ordinarily you w
 
 Similarly, on the line for Kafka we can see `0.0.0.0:9092->9092/tcp` which means that we have port 9092 inside the Kafka container mapped to the same port 9092 outside of the container.
 
-The playbook also added some Telegraf configuration that we can look at. In your terminal, run the following:
+The `network.telemetry.run` role also added some Telegraf configuration that we can look at. In your terminal, run the following:
 
 [source,bash, role=execute]
 ----
