@@ -15,9 +15,7 @@ This playbook will have the job of configuring all our Cisco devices to send tel
 * The vars block: Our inputs for the playbook
  ** `telemetry_grpc_port` - We know from Exercise 3.1 that Telegraf is listening on port *8089*.
  ** `telemetry_nodes` - We know from Exercise 3.2 that the YANG node we want to listen for has prefix `interfaces-ios-xe-oper` and xpath `interfaces`.
-* The first task
- ** Enables the use of YANG on the device (we did this already for rtr1 but not rtr2).
-* The second task
+* The only task
  ** Creates push subscriptions to all the YANG nodes described in the `telemetry_nodes` variable.
  ** The line `update-policy periodic 3000` is counting in **centiseconds**, so we'll expect a message every 30 seconds.
 

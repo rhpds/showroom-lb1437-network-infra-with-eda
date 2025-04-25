@@ -119,20 +119,20 @@ Yet Another Next-Generation (YANG) was defined in RFC 6020 and has been updated 
 https://www.cisco.com/c/en/us/products/collateral/switches/catalyst-9300-series-switches/model-driven-telemetry-wp.html[Cisco Model-Driven Telemetry Whitepaper]
 ====
 
-First, we need to enable YANG, as well as NETCONF (the protocol we need to use to be able to interact with YANG). We can do that by adding a single config line.
+First, we need to enable YANG, as well as NETCONF (the protocol we need to use to be able to interact with YANG). We can do that with Ansible.
+
+In your file explorer, under `playbooks`, open `configure_ios_yang.yml`.
+
+Looking at what this playbook does, we can see there's a task that sets `netconf-yang` in the router configuration, and that's all that is needed. The second task waits for YANG to become available, which takes about a minute.
+
+Run the playbook:
 
 [source,bash,role=execute]
 ----
-ssh rtr1
+ansible-navigator run playbooks/configure_ios_yang.yml
 ----
 
-[source,bash,role=execute]
-----
-config terminal
-netconf-yang
-end
-exit
-----
+TIP: The second task is only in the playbook as a convenience to ensure the next step runs successfully. You can move on while it runs, if you wish.
 
 Next, in your file explorer, under `playbooks`, take a look at the playbook `yang_info.yml`.
 
@@ -147,8 +147,6 @@ Go ahead and run it.
 ----
 ansible-navigator run playbooks/yang_info.yml
 ----
-
-TIP: It takes some time for YANG to become enabled from the previous step. If you run the playbook too soon, it may time out or seem to be hanging. If that happens to you, press CTRL+C and try running the playbook again.
 
 The output should look like:
 [source]
