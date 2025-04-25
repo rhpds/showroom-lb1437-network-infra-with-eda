@@ -98,7 +98,7 @@ The Rulebook Activation will try to start. As before, with the new environment y
 
 At the top of the screen, click on the `History` tab, then click on the `1 - Interface status` link. Here is where we can see the ansible-rulebook log and verify that everything came up with no errors.
 
-As before, we want to break the router config to see it get fixed. Switch back to your VSCode tab and ssh to rtr1 to do so. The commands again are:
+As before, we want to break the router config to see it get fixed. Switch back to your VS Code tab and ssh to rtr1 to do so. The commands again are:
 
 [source,role=execute]
 ----
@@ -123,7 +123,7 @@ Click on the `Actions` tab. We can see a single entry `run_job_template`. Instea
 
 image::10_intf-changed.png[intf-changed]
 
-Switch back to your VSCode tab, where your SSH session to rtr1 should still be active. Verify that the interface came back up.
+Switch back to your VS Code tab, where your SSH session to rtr1 should still be active. Verify that the interface came back up.
 
 [source,role=execute]
 ----

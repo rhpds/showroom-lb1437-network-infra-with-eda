@@ -5,15 +5,15 @@ You're the network engineer on call for a critical network infrastructure — th
 In this lab, you'll lay the groundwork to move from reactive fixes like these to proactive, event-driven automation.
 
 [#codeserver]
-== Accessing VSCode
+== Accessing VS Code
 
 When you get assigned your student workbench, you will have a couple links available to you. For now, we are only interested in the “VS Code access” section, similar to below (your details will be different from what's shown here):
 
 image::0_vscode.png[vscode]
 
-NOTE: Visual Studio Code (commonly referred to as *VSCode*) is a free development environment from Microsoft. In this lab you're actually using `code-server` (so that you can use it in a web browser) but we'll still refer to it as VSCode in these instructions. Red Hat recommends using VSCode for developing with Ansible, and publishes a supported https://marketplace.visualstudio.com/items?itemName=redhat.ansible[extension] for it.
+NOTE: Visual Studio Code (commonly referred to as *VS Code*) is a free development environment from Microsoft. In this lab you're actually using `code-server` (so that you can use it in a web browser) but we'll still refer to it as VS Code in these instructions. Red Hat recommends using VS Code for developing with Ansible, and publishes a supported https://marketplace.visualstudio.com/items?itemName=redhat.ansible[extension] for it.
 
-Click on the WebUI link to access the VSCode environment. You will be prompted for a password; use the one displayed on your assignment page.
+Click on the WebUI link to access the VS Code environment. You will be prompted for a password; use the one displayed on your assignment page.
 
 Once you are in:
 

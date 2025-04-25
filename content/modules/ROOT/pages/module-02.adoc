@@ -14,7 +14,7 @@ Ansible network resource modules simplify and standardize how you manage differe
 https://docs.ansible.com/ansible/latest/network/user_guide/network_resource_modules.html[Ansible Documentation]
 ====
 
-In the file explorer on the left side of your VSCode environment, expand the `playbooks` folder, then click on `configure_ios_routing.yml` to open it.
+In the file explorer on the left side of your VS Code environment, expand the `playbooks` folder, then click on `configure_ios_routing.yml` to open it.
 
 This is a playbook that applies a minimal configuration to a router in our lab. Let's dig into a few things about this playbook:
 

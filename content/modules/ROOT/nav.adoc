@@ -1,5 +1,5 @@
 * xref:module-01.adoc[1. Getting Started]
-** xref:module-01.adoc#codeserver[1.1. Accessing VSCode]
+** xref:module-01.adoc#codeserver[1.1. Accessing VS Code]
 ** xref:module-01.adoc#connect[1.2. Router connectivity and existing configurations]
 
 * xref:module-02.adoc[2. Network configuration with Ansible]

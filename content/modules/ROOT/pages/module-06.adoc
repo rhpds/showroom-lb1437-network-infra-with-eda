@@ -5,7 +5,7 @@ At this point, we have a functioning Event-Driven Ansible environment, fully cap
 [#bgp-yang]
 == BGP: YANG prefix and xpath 
 
-We'll start in your VSCode tab. In the file explorer, under `playbooks`, let's revisit the playbook `yang_info.yml`.
+We'll start in your VS Code tab. In the file explorer, under `playbooks`, let's revisit the playbook `yang_info.yml`.
 
 The last time we ran this, we had the `search_for` variable set to "interface" and we picked a module from the list that had "oper" in the name. This time let's change the value to be "oper", which will show us every operational module available on `rtr1`.
 
@@ -16,7 +16,7 @@ Line 8 in the playbook should be changed to look like:
     search_for: oper
 ----
 
-TIP: This VSCode environment is auto-saving, so you don't need to save files you edit before running them.
+TIP: This VS Code environment is auto-saving, so you don't need to save files you edit before running them.
 
 Once edited, run the playbook:
 
@@ -338,7 +338,7 @@ Wait for the Activation to start (Activation status should say "Running"), then 
 
 In the left side navigation, go to *Automation Execution > Jobs*. For now, there is nothing new here. The last run of "Router configuration" at the top of the list is the one from earlier that fixed the shutdown interface.
 
-We are now set up to test that the new expanded rulebook is working. Switch back to the VSCode workbench and SSH to `rtr1`.
+We are now set up to test that the new expanded rulebook is working. Switch back to the VS Code workbench and SSH to `rtr1`.
 
 [source,bash,role=execute]
 ----
@@ -363,7 +363,7 @@ image::11_bgp-aap.png[bgp-aap]
 
 This matches what we saw on the CLI, so our new BGP monitoring is working correctly. Let's also test that the interface monitoring is still working.
 
-In the left side navigation, go to *Automation Execution > Jobs* so that we are set up again to watch for new jobs. Then, switch back to your VSCode tab. You should still be in the SSH session with `rtr1` (if not, type `ssh rtr1`). Run the commands we previously used to shutdown `Tunnel0`:
+In the left side navigation, go to *Automation Execution > Jobs* so that we are set up again to watch for new jobs. Then, switch back to your VS Code tab. You should still be in the SSH session with `rtr1` (if not, type `ssh rtr1`). Run the commands we previously used to shutdown `Tunnel0`:
 
 [source,role=execute]
 ----
