@@ -45,6 +45,8 @@ Fill out the form with the information below:
 | Check `Prompt on launch` box
 |===
 
+IMPORTANT: Pay close attention to the capitalization of the Job Template name. It needs to match the value in the table exactly.
+
 When this information is entered, click the `Create job template` button at the bottom of the screen.
 
 At the top of the next screen that appears, click on the `Launch template` button.
