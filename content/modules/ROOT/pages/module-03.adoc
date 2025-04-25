@@ -32,7 +32,7 @@ Go ahead and run this playbook.
 
 [source,bash,role=execute]
 ----
-ansible-playbook playbooks/install_telemetry_stack.yml -i inventory
+ansible-navigator run playbooks/install_telemetry_stack.yml
 ----
 
 Observing the output, we can see that we've deployed something in Docker. Let's look at what's running in Docker:
@@ -62,7 +62,7 @@ The `network.telemetry.run` role also added some Telegraf configuration that we 
 
 [source,bash, role=execute]
 ----
-cat /home/student/telegraf/telegraf.conf
+sudo cat /home/ec2-user/telegraf/telegraf.conf
 ----
 
 Telegraf's job here is to take inputs in one format and output them in another, so that's what we're going to be looking for in the configuration file.
