@@ -10,6 +10,8 @@ Next, you will be prompted for your name and email address. The values you submi
 
 When you reach the "Workbench Information" screen, you are ready to move on.
 
+IMPORTANT: It's highly recommended to put your workbench in its own browser window, in order to have these instructions on one half of your screen and the workbench on the other.
+
 === Lab Topology
 
 This is the environment you will be working in:
