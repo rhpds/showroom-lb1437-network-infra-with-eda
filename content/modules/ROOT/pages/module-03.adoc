@@ -10,8 +10,6 @@ image::13_component-stack.png[component-stack]
 
 *Kafka* is an open-source distributed event streaming platform used by thousands of companies for high-performance data pipelines, streaming analytics, data integration, and mission-critical applications. https://kafka.apache.org/[[Apache\]]
 
-Telegraf is a piece of software that takes inputs in one format and outputs them in another, so that’s what we’re going to be looking for in the configuration file.
-
 [#telegraf]
 == Telegraf and Kafka
 
@@ -67,7 +65,7 @@ The playbook also added some Telegraf configuration that we can look at. In your
 cat /home/student/telegraf/telegraf.conf
 ----
 
-Telegraf is a piece of software that takes inputs in one format and outputs them in another, so that's what we're going to be looking for in the configuration file.
+Telegraf's job here is to take inputs in one format and output them in another, so that's what we're going to be looking for in the configuration file.
 
 In particular, observe this section:
 
