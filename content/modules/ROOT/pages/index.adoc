@@ -22,4 +22,4 @@ We will primarily be working with `rtr1`, and sometimes `rtr2`. We are not going
 
 All 4 devices are Cisco routers running IOS-XE.
 
-If you're unfamiliar, OSPF (Open Shortest Path First) and BGP (Border Gateway Protocol) are common routing protocols. Knowledge of how OSPF and BGP work is not required to participate in this lab.
+This information is provided for context; you don't need to memorize it, and no prior knowledge of routing protocols is required to participate in this lab.
