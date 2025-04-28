@@ -1,6 +1,8 @@
 = Getting Started
 
-You're the network engineer on call for a critical network infrastructure — the kind where a single bad config can knock out branch connectivity and trigger a flood of support tickets. It's 3AM. A routine router change just broke something important, and even though you have it handled this time, wouldn't it be nice to never wake up at this hour for this kind of thing ever again...?
+Imagine: You're the network engineer on call for a critical network infrastructure. The kind where a single bad config line can knock out branch connectivity and trigger a flood of support tickets. It's 3AM and a routine router change just broke something important. You wonder, after roughly the 12th notification, when your phone is going to stop going off.
+
+Putting aside the amount of downtime there will be while you figure this out, wouldn't it be nice to never wake up at this hour for this kind of thing ever again?
 
 In this lab, you'll lay the groundwork to move from reactive fixes like these to proactive, event-driven automation.
 
