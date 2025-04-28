@@ -2,15 +2,13 @@
 
 === Lab Access
 
-To access lab resources, go to: {lab_url}
+You should have arrived here from the workbench assignment page provided by your lab instructor.
 
-You will be prompted for a password, which will be provided to you by your lab instructor.
+You will be prompted for your name and email address. The values you submit here will be used to get you back into your same environment if anything happens with your PC.
 
-Next, you will be prompted for your name and email address. The values you submit here will be used to get you back into your same environment if anything happens with your PC.
+When you see links to lab resources under the "Workbench Information" section, you are ready to move on.
 
-When you reach the "Workbench Information" screen, you are ready to move on.
-
-IMPORTANT: It's highly recommended to put your workbench in its own browser window, in order to have these instructions on one half of your screen and the workbench on the other.
+IMPORTANT: It's highly recommended to keep your workbench and these instructions each in their own browser windows. Arrange your screen to have these instructions on one half and your workbench on the other.
 
 === Lab Topology
 
