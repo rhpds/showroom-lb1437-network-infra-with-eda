@@ -55,7 +55,9 @@ image::7_launch.png[Launch]
 
 You'll be prompted for variables (if not, double check your template has the right box checked). Don't enter anything and just click Next, then Finish.
 
-After about a minute (you will be waiting for the Execution Environment image to pull since this is a new AAP environment), the playbook runs, and it should look just like the other times we ran this same playbook on the command line. It should still come back with all `ok` task outputs. The difference now is that we have access to enterprise features like role-based access control, automatic logging, push-button execution, and API-based job launches, among others.
+TIP: It takes about a minute for the playbook to start running. This is because you will be waiting for the Execution Environment image to pull, since this is a new AAP environment
+
+When the playbook runs, it should look just like the other times we ran this same playbook on the command line. It should still come back with all `ok` task outputs. The difference now is that we have access to enterprise features like role-based access control, automatic logging, push-button execution, and API-based job launches, among others.
 
 [#eda]
 == Configuring Event-Driven Ansible Controller
@@ -94,7 +96,9 @@ Two things to highlight here:
 * The rulebook `interface_status_aap.yml` is the same as the rulebook `interface_status_cli.yml` that you ran earlier on the command line with one key difference: The action is to kick off a Job Template (the one you just made). This is the reason why you need the `Automation Controller` credential.
 * We are using a Decision Environment, which is like an Execution Environment, but for use with Event-Driven Ansible.
 
-The Rulebook Activation will try to start. As before, with the new environment you'll need to wait for it to pull the Decision Environment image, but after about a minute you should see `Activation status` change to `Running`.
+TIP: As before, with the new environment you'll need to wait for it to pull the Decision Environment image, which takes about a minute.
+
+You can proceed when you see `Activation status` change to `Running`.
 
 At the top of the screen, click on the `History` tab, then click on the `1 - Interface status` link. Here is where we can see the ansible-rulebook log and verify that everything came up with no errors.
 

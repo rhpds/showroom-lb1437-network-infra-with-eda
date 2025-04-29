@@ -1,8 +1,10 @@
 = Telegraf, Kafka, and YANG
 
-Our goal will be to have our routers self-report when something is wrong, so that Ansible can fix it, as we simulated in the last section. We'll need to install some software to help us bridge the gap between the routers and Ansible, and we'll need to find out some information about the data we need to do this.
+Our goal will be to have our routers self-report when something is wrong, so that Ansible can fix it, as we simulated in the last section.
 
-Ultimately we are looking to establish this stack of components:
+We'll need to install some software to help us bridge the gap between the routers and Ansible, and we'll need to find out some information about the data we need to do this.
+
+Ultimately, we are looking to establish this stack of components:
 
 image::13_component-stack.png[component-stack]
 
@@ -34,6 +36,8 @@ Go ahead and run this playbook.
 ----
 ansible-navigator run playbooks/install_telemetry_stack.yml
 ----
+
+TIP: Expect this playbook to take a little time to complete. When it finishes, there will be a popup about an application running on port 8089, which can be safely closed.
 
 Observing the output, we can see that we've deployed something in Docker. Let's look at what's running in Docker:
 

@@ -162,12 +162,27 @@ rtr2                       : ok=2    changed=1    unreachable=0    failed=0    s
 
 We can see that the only lines reporting `changed` are related to BGP, since the interface monitoring was alrady applied.
 
-In your terminal, ssh to `rtr1`. First we'll verify that the telemetry configuration is looking good (note that we are looking at subscription ID 2 instead of 1 like before).
+In your terminal, ssh to `rtr1`.
 
 [source,bash,role=execute]
 ----
 ssh rtr1
 ----
+
+First, we'll verify that the telemetry configuration is looking good:
+
+[source,role=execute]
+----
+show running-config | section telemetry
+----
+
+You should see both subscriptions:
+
+* Subscription 1 using xpath `/interfaces-ios-xe-oper:interfaces`
+
+* Subscription 2 using xpath `/bgp-ios-xe-oper:bgp-state-data/neighbors`
+
+Next, ensure that the router sees the new subscription as valid:
 
 [source,role=execute]
 ----
@@ -208,9 +223,11 @@ We'll need to choose something in this message to use to detect a bad BGP state.
 
 In your student workbench, open the file `rulebooks/routing_status_cli.yml`.
 
-This file should look familiar. You can open the rulebook we used earlier, `rulebooks/interface_status_cli.yml`, and see that the two files are almost identical. This new rulebook has one change, which is the addition of another rule under the `rules` block. The action in the new rule is also the same, since the playbook we've been using applies both interface and BGP configurations.
+This file should look familiar. You can open the rulebook we used earlier, `rulebooks/interface_status_cli.yml`, and see that the two files are very similar.
 
-The intent is that we will run this rulebook instead of the one we were useing earlier, since it represents a more complete coverage of our routing configuration, and the source (Kafka topic "eda") is identical.
+This new rulebook has one change, which is the addition of another rule under the `rules` block. The action in the new rule is also the same, since the playbook we've been using applies both interface and BGP configurations.
+
+The intent is that we will run this rulebook instead of the one we were using earlier, since it represents a more complete coverage of our routing configuration, and the source (Kafka topic "eda") is identical.
 
 Let's run it to test. You should still have a second terminal from the last time we ran `ansible-rulebook`. Switch to it using the navigation on the right side of the terminal. In this terminal, run the following command:
 
@@ -274,9 +291,9 @@ Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State
 10.200.200.2    4        65009       0       0        1    0    0 00:00:06 Idle
 ----
 
-Now swap back to your `ansible-rulebook` (python3) terminal.
+Now swap back to your `ansible-rulebook` (python3) terminal. You should see the playbook run.
 
-You should see the playbook run. If you don't catch it live, remember that previously there was no output. Therefore, if you see anything after your `ansible-rulebook` command, then it was the result of what you just did.
+TIP: It's possible to get unlucky timing here. If you don't catch the playbook kicking off, or the BGP state is not what you expect, the telemetry message may have fired right after you issued your command.
 
 Example output:
 
@@ -363,7 +380,7 @@ image::11_bgp-aap.png[bgp-aap]
 
 This matches what we saw on the CLI, so our new BGP monitoring is working correctly. Let's also test that the interface monitoring is still working.
 
-In the left side navigation, go to *Automation Execution > Jobs* so that we are set up again to watch for new jobs. Then, switch back to your VS Code tab. You should still be in the SSH session with `rtr1` (if not, type `ssh rtr1`). Run the commands we previously used to shutdown `Tunnel0`:
+In the left side navigation, go to *Automation Execution > Jobs* so that we are set up again to watch for new jobs. Then, switch back to your VS Code tab. You should still be in the SSH session with `rtr1`. Run the commands we previously used to shutdown `Tunnel0`:
 
 [source,role=execute]
 ----

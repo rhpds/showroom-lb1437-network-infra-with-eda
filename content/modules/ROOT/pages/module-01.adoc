@@ -65,7 +65,7 @@ cisco C8000V (VXE) processor (revision VXE) with 1955292K/3075K bytes of memory.
 
 We can see that we are working with a virtual Cisco 8000V router running IOS-XE 17.14.01a.
 
-We'll also look at some configuration that has been pre-applied.
+We'll also look at some existing configuration.
 
 Run the following command:
 [source,role=execute]
@@ -89,7 +89,7 @@ interface Tunnel0
 [truncated]
 ----
 
-This shows us that there is an interface on `rtr1` called `Tunnel0` that is involved in OSPF. The OSPF and interface configurations have already been applied.
+This shows us that there is an interface on `rtr1` called `Tunnel0` that is involved in OSPF.
 
 Next, run:
 [source,role=execute]
@@ -111,9 +111,9 @@ router bgp 65000
 [truncated]
 ----
 
-This shows us that there is BGP configuration on `rtr1` that has also already been applied.
+This shows us that there is existing BGP configuration on `rtr1`.
 
-We'll work with these pre-applied configurations later.
+We'll work with these brownfield configurations later.
 
 Exit your SSH session before moving on.
 

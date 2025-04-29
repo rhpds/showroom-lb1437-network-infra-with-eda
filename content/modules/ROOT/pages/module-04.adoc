@@ -5,8 +5,6 @@ With the pieces all in place, and all the information gathered, we can now start
 [#ios]
 == IOS configuration
 
-Now we can put together what we just found.
-
 In your file explorer, under `playbooks`, take a look at the playbook `configure_ios_telemetry.yml`.
 
 This playbook will have the job of configuring all our Cisco devices to send telemetry messages to Telegraf. There are several things to look at here.
@@ -26,12 +24,35 @@ Go ahead and run the playbook:
 ansible-navigator run playbooks/configure_ios_telemetry.yml
 ----
 
-In your terminal, ssh to `rtr1`. First we'll verify that the telemetry configuration is looking good.
+In your terminal, ssh to `rtr1`:
 
 [source,bash,role=execute]
 ----
 ssh rtr1
 ----
+
+First, we'll verify that the telemetry configuration is looking good:
+
+[source,role=execute]
+----
+show running-config | section telemetry
+----
+
+You should see:
+
+----
+telemetry ietf subscription 1
+ encoding encode-kvgpb
+ filter xpath /interfaces-ios-xe-oper:interfaces
+ source-address 172.16.137.114
+ stream yang-push
+ update-policy periodic 3000
+ receiver ip address 172.16.88.75 8089 protocol grpc-tcp
+----
+
+TIP: Your IP addresses will differ from the above example.
+
+Next, ensure that the router sees the new subscription as valid:
 
 [source,role=execute]
 ----
@@ -45,12 +66,16 @@ ID         Type       State      State Description
 1          Configured Valid      Subscription validated
 ----
 
-Now let's make sure that this is producing messages in Kafka. Exit out of the router SSH session and run the following Kafka listener command.
+Exit out of the router SSH session.
 
 [source,role=execute]
 ----
 exit
 ----
+
+Now let's make sure that this is producing messages in Kafka.
+
+Run the following Kafka listener command:
 
 [source,bash,role=execute]
 ----
@@ -132,6 +157,7 @@ configure terminal
 interface Tunnel0
 shutdown
 end
+show ip interface brief
 ----
 
 Now, switch back to your `ansible-rulebook` terminal (using the navigation on the right side of the terminal - the correct one will be labeled `python3` any time `ansible-rulebook` is running) and observe.

@@ -1,6 +1,6 @@
 = Network configuration with Ansible
 
-It's the next morning, and even though our (most recent) crisis has been averted, the way you fixed that router wasn't sustainable. We can do better than manually copying and pasting configs in the middle of the night.
+It's the next morning, and even though our (most recent) crisis has been averted, the way you fixed that router wasn't sustainable. We can do better than manually copying and pasting configs in the middle of the night!
 
 [#iac]
 == Infrastructure as Code
@@ -55,7 +55,7 @@ ok: [rtr1] => {
 [...]
 ----
 
-NOTE: With Ansible Network Resources, the `interfaces` resource only contains basic interface configuration. There are other interface resources (`l2_interfaces` and `l3_interfaces`) for Layer 2 and Layer 3 configuration aspects.
+NOTE: With Ansible Network Resources, the `interfaces` resource only contains basic interface configuration, such as `enabled` true/false. There are other interface resources (`l2_interfaces` and `l3_interfaces`) for Layer 2 and Layer 3 configuration aspects.
 
 In the second task's output, we see:
 
@@ -112,10 +112,10 @@ This is a playbook that applies the configuration we just looked at. Let's dig i
 * The hosts line
  ** Later in the lab, Event-Driven Ansible (EDA) is going to identify which devices in our lab have had their configurations changed. We want to be able to only run remediation on devices that we know need it, which is what the `ansible_eda` variable is for.
  ** We don't have EDA involved yet, so `ansible_eda` is not defined, and we'll therefore default to rtr1 and rtr2 for now.
-* The resource state
+* The resource `state` parameter
  ** For the sake of this lab, we're using state `merged`, which is the least destructive state we can use, and is recommended for testing.
  ** You can check out the https://docs.ansible.com/ansible/latest/network/user_guide/network_resource_modules.html[documentation on Network Resource Modules] for a description of the available states and why you'd want to use each one. The `replaced` state, for example, would wipe out any configuration in the relevant subsection _not_ found in the resource data, which is helpful for compliance and drift control.
-* The resource data
+* The resource `config` parameter
  ** The module inputs are very minimal, as they reference variable data. This data comes from the inventory, which we just looked at.
 
 [IMPORTANT]
@@ -155,7 +155,9 @@ This time both of the tasks report `ok`. This means that our live configuration 
 [#recover]
 == Recovering from a misconfiguration
 
-Time to break things. Let's start by logging into `rtr1` over SSH and looking at the output of a couple commands. Run the following:
+Time to break things. Let's start by logging into `rtr1` over SSH and looking at the output of a couple commands.
+
+Run the following:
 
 [source,bash,role=execute]
 ----
@@ -180,7 +182,9 @@ Tunnel1                10.200.200.1    YES manual up                    up
 VirtualPortGroup0      192.168.35.101  YES TFTP   up                    up      
 ----
 
-We can see that all of the interfaces on the router are up, including `Tunnel0`, which we identified earlier as being involved in OSPF. Let's look at that next. Run the following:
+We can see that all of the interfaces on the router are up, including `Tunnel0`, which we identified earlier as being involved in OSPF. Let's look at that next.
+
+Run the following:
 
 [source,bash,role=execute]
 ----
@@ -197,7 +201,9 @@ Neighbor ID     Pri   State           Dead Time   Address         Interface
 192.168.3.3       0   FULL/  -        00:00:30    10.100.100.2    Tunnel0
 ----
 
-Again we see the importance of `Tunnel0`. What happens if `Tunnel0` gets shut down? Let's find out. Run the following commands:
+Again we see the importance of `Tunnel0`. What happens if `Tunnel0` gets shut down? Let's find out.
+
+Run the following commands:
 
 [source,role=execute]
 ----
@@ -234,7 +240,9 @@ And see its effect on OSPF:
 show ip ospf neighbor
 ----
 
-You get no output from running this command, which is not good. We should turn `Tunnel0` back on. But, rather than doing that manually, we should be able to have Ansible get us back to a known-good state. Exit out of the SSH session and run the configuration playbook that we were running before.
+You get no output from running this command, which is not good. We should turn `Tunnel0` back on. But, rather than doing that manually, we should be able to have Ansible get us back to a known-good state.
+
+Exit out of the SSH session and run the configuration playbook that we were running before.
 
 [source,role=execute]
 ----
