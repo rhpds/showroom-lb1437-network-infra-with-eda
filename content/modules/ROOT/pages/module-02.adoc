@@ -213,6 +213,8 @@ shutdown
 end
 ----
 
+TIP: When copy/pasting multi-line blocks like this in the terminal, all lines except the last one will automatically be issued. Be sure to hit [Enter] after pasting so that all lines are issued.
+
 Check to see that the interface came down:
 
 [source,bash,role=execute]

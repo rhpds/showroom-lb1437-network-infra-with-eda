@@ -41,6 +41,8 @@ image::1_code-server.png[code-server]
 
 In your terminal at the bottom of the screen, test that you can SSH to rtr1. You should not be prompted for a password as SSH keys have been set up ahead of time.
 
+IMPORTANT: In this lab, you will be issuing many terminal commands. Be sure to use the copy button on the right side of each command block, which will copy the command(s) for you to paste into your terminal.
+
 [source,bash,role=execute]
 ----
 ssh rtr1
