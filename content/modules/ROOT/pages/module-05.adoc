@@ -36,7 +36,7 @@ Fill out the form with the information below:
 | playbooks/configure_ios_routing.yml
 
 | *Execution environment*
-| network workshop execution environment
+| Lab EE
 
 | *Credentials*
 | Workshop Credential \| Machine
