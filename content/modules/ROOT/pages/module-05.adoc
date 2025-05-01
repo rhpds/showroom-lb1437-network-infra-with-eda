@@ -84,7 +84,7 @@ Similar to what you did for the Job Template, fill out the form with the informa
 | Automation Controller
 
 | *Decision environment*
-| Quay DE
+| Lab DE
 |===
 
 Everything else can be left empty or default. Click the `Create rulebook activation` button at the bottom of the screen.

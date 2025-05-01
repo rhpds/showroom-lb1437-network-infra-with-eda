@@ -352,7 +352,7 @@ Now we will re-make the Rulebook Activation. Click on the blue "Create rulebook 
 | Automation Controller
 
 | *Decision environment*
-| Quay DE
+| Lab DE
 |===
 
 Wait for the Activation to start (Activation status should say "Running"), then click on the History tab. Note that you have an entry titled "2 - Routing status" which, as before, means EDA is up and listening for events.
