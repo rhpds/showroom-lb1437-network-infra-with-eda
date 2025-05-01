@@ -1,10 +1,10 @@
 = Getting Started
 
-Imagine: You're the network engineer on call for a critical network infrastructure. The kind where a single bad config line can knock out branch connectivity and trigger a flood of support tickets. It's 3AM and a routine router change just broke something important. You wonder, after roughly the 12th notification, when your phone is going to stop going off.
+Imagine: You're the network engineer on call for a production network that hundreds of users rely on every day. It's 3AM, and a routine router change just broke something important. Your phone won't stop going off.
 
-Putting aside the amount of downtime there will be while you figure this out, wouldn't it be nice to never wake up at this hour for this kind of thing ever again?
+While you scramble to fix the issue - knowing downtime means lost productivity and real cost - one thought keeps surfacing: _Wouldn't it be nice to never wake up for this kind of thing again?_
 
-In this lab, you'll lay the groundwork to move from reactive fixes like these to proactive, event-driven automation.
+In this lab, you'll lay the groundwork to make that possible - moving from reactive fixes to proactive, event-driven automation.
 
 [#codeserver]
 == Accessing VS Code
@@ -19,7 +19,7 @@ Click on the WebUI link to access the VS Code environment. You will be prompted 
 
 Once you are in:
 
-1. Go to File > Open Folder… and select `/home/student/telemetry/` (the default is `/home/student/` so be sure to click on `telemetry` in the center pop-up to fill in the rest), click OK.  
+1. Go to File > Open Folder… and select `/home/student/telemetry/` (the default is `/home/student/` so be sure to click on `telemetry` at the bottom of the center pop-up to fill in the rest), click OK.  
 2. The page reloads. You can select “Yes, I trust the authors”.  
 3. Go to Terminal > New Terminal
 
