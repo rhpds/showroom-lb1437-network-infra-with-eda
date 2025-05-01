@@ -11,7 +11,7 @@ We'll be making use of Network Resource Modules, which differ from other module 
 ====
 Ansible network resource modules simplify and standardize how you manage different network devices. Network devices separate configuration into sections (such as interfaces and VLANs) that apply to a network service. Ansible network resource modules take advantage of this to allow you to configure subsections or _resources_ within the network device configuration. Network resource modules provide a consistent experience across different network devices.
 
-https://docs.ansible.com/ansible/latest/network/user_guide/network_resource_modules.html[Ansible Documentation]
+Source and more info:  https://docs.ansible.com/ansible/latest/network/user_guide/network_resource_modules.html[Ansible Documentation, window="_blank"]
 ====
 
 In the file explorer on the left side of your VS Code environment, expand the `playbooks` folder, then click on `gather_ios_routing.yml` to open it.
@@ -95,7 +95,7 @@ This is the same configuration that we just saw in Exercise 1.2, but this time w
 
 Right now we see the data in JSON format, but JSON and YAML are compatible formats, and Ansible has filter plugins like `to_nice_yaml` available to convert between them. This capturing and converting has been done ahead of time, as we'll see next.
 
-In the file explorer, expand the `host_vars` directory under `playbooks`. There is a directory here for each router in the environment. Expand `rtr1` and open the files `interfaces.yml` and `bgp_global.yml`.
+In the file explorer, expand the `host_vars` directory under `playbooks`. There is a directory here for each router in the environment. Expand `rtr1` and take a look at the files `interfaces.yml` and `bgp_global.yml`.
 
 image::14_host-vars.png[host-vars]
 
@@ -110,12 +110,19 @@ Next, click on `configure_ios_routing.yml` to open it.
 This is a playbook that applies the configuration we just looked at. Let's dig into a few things about this playbook:
 
 * The hosts line
+
  ** Later in the lab, Event-Driven Ansible (EDA) is going to identify which devices in our lab have had their configurations changed. We want to be able to only run remediation on devices that we know need it, which is what the `ansible_eda` variable is for.
+
  ** We don't have EDA involved yet, so `ansible_eda` is not defined, and we'll therefore default to rtr1 and rtr2 for now.
+
 * The resource `state` parameter
+
  ** For the sake of this lab, we're using state `merged`, which is the least destructive state we can use, and is recommended for testing.
- ** You can check out the https://docs.ansible.com/ansible/latest/network/user_guide/network_resource_modules.html[documentation on Network Resource Modules] for a description of the available states and why you'd want to use each one. The `replaced` state, for example, would wipe out any configuration in the relevant subsection _not_ found in the resource data, which is helpful for compliance and drift control.
+
+ ** You can check out the https://docs.ansible.com/ansible/latest/network/user_guide/network_resource_modules.html[documentation on Network Resource Modules, window="_blank"] for a description of the available states and why you'd want to use each one. The `replaced` state, for example, would wipe out any configuration in the relevant subsection _not_ found in the resource data, which is helpful for compliance and drift control.
+
 * The resource `config` parameter
+
  ** The module inputs are very minimal, as they reference variable data. This data comes from the inventory, which we just looked at.
 
 [IMPORTANT]

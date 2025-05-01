@@ -29,8 +29,8 @@ Consider what you commonly see in your environment. You may want to use the lab 
 This lab was on Cisco IOS-XE, but that's not the only network platform where this is possible.
 
 * Cisco NX-OS can use the same technology stack that we used in this lab. You can use YANG for the data source, but NX-API and DME are also available. There's even a dedicated module to configure telemetry: `cisco.nxos.nxos_telemetry`
-* Arista EOS can be polled by Telegraf over gNMI. https://aristanetworks.github.io/openmgmt/telemetry/adapters/kafka/[An example can be found here].
-* If you have an existing network monitoring tool such as https://catalog.redhat.com/software/collection/dynatrace/event_driven_ansible[Dynatrace], you may be able to plug it into Event-Driven Ansible
+* Arista EOS can be polled by Telegraf over gNMI. https://aristanetworks.github.io/openmgmt/telemetry/adapters/kafka/[An example can be found here, window="_blank"].
+* If you have an existing network monitoring tool such as https://catalog.redhat.com/software/collection/dynatrace/event_driven_ansible[Dynatrace, window="_blank"], you may be able to plug it into Event-Driven Ansible
 
 [#more]
 == More resources

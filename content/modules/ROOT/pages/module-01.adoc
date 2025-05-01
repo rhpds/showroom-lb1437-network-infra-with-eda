@@ -13,7 +13,7 @@ When you get assigned your student workbench, you will have a couple links avail
 
 image::0_vscode.png[vscode]
 
-NOTE: Visual Studio Code (commonly referred to as *VS Code*) is a free development environment from Microsoft. In this lab you're actually using `code-server` (so that you can use it in a web browser) but we'll still refer to it as VS Code in these instructions. Red Hat recommends using VS Code for developing with Ansible, and publishes a supported https://marketplace.visualstudio.com/items?itemName=redhat.ansible[extension] for it.
+NOTE: Visual Studio Code (commonly referred to as *VS Code*) is a free development environment from Microsoft. In this lab you're actually using `code-server` (so that you can use it in a web browser) but we'll still refer to it as VS Code in these instructions. Red Hat recommends using VS Code for developing with Ansible, and publishes a supported https://marketplace.visualstudio.com/items?itemName=redhat.ansible[extension, window="_blank"] for it.
 
 Click on the WebUI link to access the VS Code environment. You will be prompted for a password; use the one displayed on your assignment page.
 

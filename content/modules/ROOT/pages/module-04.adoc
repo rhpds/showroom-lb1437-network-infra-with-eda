@@ -123,7 +123,7 @@ NOTE: If you recall looking at the YANG tree `Cisco-IOS-XE-interfaces-oper.tree`
 
 In your file explorer, expand the `rulebooks` directory. Then inside that directory, open the file `interface_status_cli.yml`.
 
-This is a *rulebook* which is the mechanism for controlling Event-Driven Ansible, the same way a playbook controls regular Ansible.
+This is a *rulebook* which is the mechanism for controlling Event-Driven Ansible (EDA), the same way a playbook controls regular Ansible.
 
 * We have a Kafka source available on port 9092, which we know from Exercice 3.1. We can get access to that in EDA by using the `ansible.eda.kafka` *event source plugin*.
 * We have a single rule

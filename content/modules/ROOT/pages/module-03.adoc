@@ -21,7 +21,7 @@ We will be using a Validated Content Collection to make these tools available to
 ====
 Ansible validated content is a new set of collections containing pre-built YAML content (such as playbooks or roles) to address the most common automation use cases. You can use Ansible validated content out-of-the-box or as a learning opportunity to develop your skills. It's a trusted starting point to bootstrap your automation: use it, customize it, and learn from it.
 
-https://access.redhat.com/support/articles/ansible-automation-platform-certified-content[Red Hat Customer Portal]
+Source and more info:  https://access.redhat.com/support/articles/ansible-automation-platform-certified-content[Red Hat Customer Portal, window="_blank"]
 ====
 
 Specifically, we'll be using the validated `network.telemetry` collection to install a Telegraf/Kafka stack in containers, that will translate the telemetry messages coming from the Cisco device and make them consumable by Event-Driven Ansible.
@@ -37,7 +37,7 @@ Go ahead and run this playbook.
 ansible-navigator run playbooks/install_telemetry_stack.yml
 ----
 
-TIP: Expect this playbook to take a little time to complete. When it finishes, there will be a popup about an application running on port 8089, which can be safely closed.
+TIP: Expect this playbook to take about a minute to complete. When it finishes, there will be a popup about an application running on port 8089, which can be safely closed.
 
 Observing the output, we can see that we've deployed something in Docker. Let's look at what's running in Docker:
 
@@ -114,13 +114,15 @@ The `LEADER_NOT_AVAILABLE` message means that no messages have been received on 
 [#yang]
 == YANG models
 
-We're going to want to configure our routers for Model-Driven Telemetry in order to send data to Telegraf, but we don't yet know the location of the data we need. We can use Ansible to figure that out, using the certified `ansible.yang` collection to query YANG models on our lab router.
+Since that `Tunnel0` interface looked important earlier, we will make it our goal to have our routers report whenever it's configured to be down.
+
+We're going to want to configure our routers for Model-Driven Telemetry in order to send this data to Telegraf, but we don't yet know the location of the data we need. We can use Ansible to figure that out, using the certified `ansible.yang` collection to query YANG models on our lab router.
 
 [NOTE]
 ====
 Yet Another Next-Generation (YANG) was defined in RFC 6020 and has been updated in RFC 7950. The YANG data modeling language was developed by IETF to enable the reuse of data models across equipment from different network vendors. It is widely used by network operators to automate the configuration and monitoring of network devices and define the capabilities of the API.
 
-https://www.cisco.com/c/en/us/products/collateral/switches/catalyst-9300-series-switches/model-driven-telemetry-wp.html[Cisco Model-Driven Telemetry Whitepaper]
+Source and more info: https://www.cisco.com/c/en/us/products/collateral/switches/catalyst-9300-series-switches/model-driven-telemetry-wp.html[Cisco Model-Driven Telemetry Whitepaper, window="_blank"]
 ====
 
 First, we need to enable YANG, as well as NETCONF (the protocol we need to use to be able to interact with YANG). We can do that with Ansible.

@@ -70,7 +70,7 @@ Once edited, run the playbook:
 ansible-navigator run playbooks/yang_fetch.yml
 ----
 
-The playbook will again create some files in `playbooks/yang_files`. We now have a couple new ones, including `Cisco-IOS-XE-bgp-oper.yang` and `Cisco-IOS-XE-bgp-oper.tree`.
+The playbook will again create some files in `playbooks/yang_files`. We now have a couple new files, including `Cisco-IOS-XE-bgp-oper.yang` and `Cisco-IOS-XE-bgp-oper.tree`.
 
 Click on `Cisco-IOS-XE-bgp-oper.yang` and as before, look for a line starting with "prefix". On line 4 you should see:
 
@@ -78,7 +78,9 @@ Click on `Cisco-IOS-XE-bgp-oper.yang` and as before, look for a line starting wi
   prefix bgp-ios-xe-oper;
 ----
 
-Our prefix will be *bgp-ios-xe-oper*. Next, let's look in `Cisco-IOS-XE-bgp-oper.tree`, which looks like:
+Our prefix will be *bgp-ios-xe-oper*.
+
+Next, let's look in `Cisco-IOS-XE-bgp-oper.tree`, which looks like:
 
 [source,textinfo]
 ----
@@ -100,7 +102,9 @@ module: Cisco-IOS-XE-bgp-oper
 [truncated]
 ----
 
-We can see that under `bgp-state-data` is a key called `neighbors`, and under that is a key called `neighbor`, and under that is some promising-looking data about BGP state. We'll remember the xpath *bgp-state-data/neighbors*.
+We can see that under `bgp-state-data` is a key called `neighbors`, and under that is a key called `neighbor`, and under that is some promising-looking data about BGP state.
+
+We'll remember the xpath *bgp-state-data/neighbors*.
 
 [#bgp-tele]
 == BGP: Configuring and testing telemetry
@@ -320,7 +324,7 @@ Notice that the second task of the playbook reported "changed" this time instead
 
 Most of the AAP elements are already set up from previous exercises. All we need to do is swap the old rulebook out for the new one.
 
-Switch to your AAP tab. You will most likely need to log in again.
+Switch to your AAP tab. You may need to log in again.
 
 In the left side navigation, go to *Automation Decisions > Rulebook Activations*. Your "Interface status" activation from earlier should still be running. On the far right side, click the 3 dots and select "Delete rulebook activation".
 
