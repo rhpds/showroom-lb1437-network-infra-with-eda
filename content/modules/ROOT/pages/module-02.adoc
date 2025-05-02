@@ -119,7 +119,7 @@ This is a playbook that applies the configuration we just looked at. Let's dig i
 
  ** For the sake of this lab, we're using state `merged`, which is the least destructive state we can use, and is recommended for testing.
 
- ** You can check out the https://docs.ansible.com/ansible/latest/network/user_guide/network_resource_modules.html[documentation on Network Resource Modules, window="_blank"] for a description of the available states and why you'd want to use each one. The `replaced` state, for example, would wipe out any configuration in the relevant subsection pass:[<em>not</em>] found in the resource data, which is helpful for compliance and drift control.
+ ** You can check out the https://docs.ansible.com/ansible/latest/network/user_guide/network_resource_modules.html[documentation on Network Resource Modules, window="_blank"] for a description of the available states and why you'd want to use each one. The `replaced` state, for example, would wipe out any configuration in the relevant subsection not found in the resource data, which is helpful for compliance and drift control.
 
 * The resource `config` parameter
 
