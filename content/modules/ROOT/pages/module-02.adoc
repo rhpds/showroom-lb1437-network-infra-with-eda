@@ -111,7 +111,7 @@ This is a playbook that applies the configuration we just looked at. Let's dig i
 
 * The hosts line
 
- ** Later in the lab, Event-Driven Ansible (EDA) is going to identify which devices in our lab have had their configurations changed. We want to be able to only run remediation on devices that we know need it, which is what the `ansible_eda` variable is for.
+ ** Later in the lab, Event-Driven Ansible (EDA) is going to identify which devices in our lab have a bad configuration. We want to be able to only run remediation on devices that we know need it, which is what the `ansible_eda` variable is for.
 
  ** We don't have EDA involved yet, so `ansible_eda` is not defined, and we'll therefore default to rtr1 and rtr2 for now.
 
