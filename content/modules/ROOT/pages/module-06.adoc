@@ -404,4 +404,4 @@ This is the same as what we were seeing before, so that is working as expected.
 
 If desired, repeat any of these tests by breaking configurations on `rtr2` instead of `rtr1`.
 
-You now have both misconfiguration conditions being handled in AAP.
+You now have both misconfiguration conditions being handled in AAP. And, you have the tools you need to extend this even further.

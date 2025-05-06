@@ -249,7 +249,7 @@ And see its effect on OSPF:
 show ip ospf neighbor
 ----
 
-You get no output from running this command, which is not good. We should turn `Tunnel0` back on. But, rather than doing that manually, we should be able to have Ansible get us back to a known-good state.
+You get no output from running this command, which is not good. We should turn `Tunnel0` back on. But, rather than doing that manually, we can have Ansible get us back to a known-good state.
 
 Exit out of the SSH session and run the configuration playbook that we were running before.
 
