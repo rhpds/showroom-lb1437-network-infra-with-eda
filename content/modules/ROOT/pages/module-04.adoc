@@ -84,9 +84,9 @@ sudo docker exec -it broker kafka-console-consumer --bootstrap-server localhost:
 
 NOTE: This is the same command from earlier, but with a couple pipe additions. This is to help us filter out messages that are relevant to what we're doing, and persist to a file so we can more easily inspect the messages.
 
-Wait for a message to appear in your terminal. It may take up to 30 seconds. Once one does, pres CTRL+C a few times to stop the listener.
+Wait for a message to appear in your terminal. It may take up to 30 seconds. Once one does, press CTRL+C a few times to stop the listener.
 
-You should now have an `interface.json` file available in your file explorer. Open it so that we can see how the data is being formatted by Telegraf.
+You should now have an `interface.json` file available in your file explorer. This is the same data from the console, but more readable. Open it so that we can see how the data is being formatted by Telegraf.
 
 Your file should look like the following (some sections removed for brevity):
 
@@ -125,11 +125,19 @@ In your file explorer, expand the `rulebooks` directory. Then inside that direct
 
 This is a *rulebook* which is the mechanism for controlling Event-Driven Ansible (EDA), the same way a playbook controls regular Ansible.
 
-* We have a Kafka source available on port 9092, which we know from Exercice 3.1. We can get access to that in EDA by using the `ansible.eda.kafka` *event source plugin*.
-* We have a single rule
- ** The condition looks for `event.body.fields.admin_status` to be anything other than "if-state-up", which we identified in the previous exercise as the good/normal state.
- ** The condition also looks for `event.body.tags.name` to be "Tunnel0" (so that we don't trigger on other interfaces being down).
- ** The response to this condition is to run the configuration playbook - the same one we ran in Exercise 2.2 to recover from a misconfiguration.
+We can break this down into sections:
+
+* The `sources` block
+
+** We have a Kafka source available on port 9092, using a topic called "eda", which we know from Exercice 3.1.
+** We're accessing that in EDA by using the `ansible.eda.kafka` *event source plugin*.
+
+* The `rules` block
+
+** We have a single rule.
+** The rule condition looks for `event.body.fields.admin_status` to be anything other than "if-state-up", which we identified in the previous exercise as the good/normal state.
+** The rule condition also looks for `event.body.tags.name` to be "Tunnel0" (so that we don't trigger on other interfaces being down).
+** The response to this condition is to run the configuration playbook - the same one we ran in Exercise 2.2 to recover from a misconfiguration.
 
 While you're here, also take a look at `interface_status_aap.yml`. We aren't going to use it now, but we will later. Note the difference between the two rulebooks at the very end under `action`.
 
@@ -142,7 +150,9 @@ In your new terminal, run the following command:
 ansible-rulebook --rulebook rulebooks/interface_status_cli.yml -i inventory
 ----
 
-You should not initially see any output. This is normal, since no conditions are currently being met. For now, leave this alone and switch back to your original terminal.
+IMPORTANT: You should not initially see any output. This is normal, since no conditions are currently being met.
+
+For now, leave this alone and switch back to your original terminal.
 
 What we want to do now is bring the `Tunnel0` interface down again and see if `ansible-rulebook` will react to it. Run the following commands from earlier:
 

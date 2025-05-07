@@ -376,7 +376,7 @@ neighbor 10.200.200.2 remote-as 65009
 end
 ----
 
-Once these commands have been issued, switch back to your AAP tab. Look for another instance of "Router configuration" to kick off. Once it does, click on it to monitor the progress.
+Once these commands have been issued, switch back to your AAP tab. Look for another instance of "Router configuration" to kick off (you may again be waiting a few seconds). Once it does, click on it to monitor the progress.
 
 You should see:
 

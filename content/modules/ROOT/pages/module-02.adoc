@@ -176,7 +176,7 @@ ssh rtr1
 show ip interface brief
 ----
 
-Expected output:
+Example output:
 
 [source]
 ----
@@ -229,7 +229,7 @@ Check to see that the interface came down:
 show ip interface brief
 ----
 
-Expected output:
+Example output:
 
 [source]
 ----

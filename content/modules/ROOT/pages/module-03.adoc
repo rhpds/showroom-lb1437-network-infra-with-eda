@@ -39,7 +39,7 @@ ansible-navigator run playbooks/install_telemetry_stack.yml
 
 TIP: Expect this playbook to take about a minute to complete. When it finishes, there will be a popup about an application running on port 8089, which can be safely closed.
 
-Observing the output, we can see that we've deployed something in Docker. Let's look at what's running in Docker:
+Observing the output, we can see that we've deployed something in Docker. Let's look at what's running:
 
 [source,bash,role=execute]
 ----
