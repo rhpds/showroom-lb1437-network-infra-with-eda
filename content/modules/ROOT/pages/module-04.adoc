@@ -129,7 +129,7 @@ We can break this down into sections:
 
 * The `sources` block
 
-** We have a Kafka source available on port 9092, using a topic called "eda", which we know from Exercice 3.1.
+** We have a Kafka source available on port 9092, using a topic called "eda", which we know from Exercise 3.1.
 ** We're accessing that in EDA by using the `ansible.eda.kafka` *event source plugin*.
 
 * The `rules` block

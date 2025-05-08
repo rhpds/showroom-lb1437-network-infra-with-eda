@@ -21,7 +21,7 @@ There are many possible ways to use this technology that we didn't cover, such a
 * Automatic triage of network conditions when an issue is detected, and putting the results in a ticket
 * Checking availability of downstream resources to determine issue severity
 
-Consider what you commonly see in your environment. You may want to use the lab environment to explore the possibilies.
+Consider what you commonly see in your environment. You may want to use the lab environment to explore the possibilities.
 
 [#other]
 == Other network platforms

@@ -99,7 +99,7 @@ In the file explorer, expand the `host_vars` directory under `playbooks`. There 
 
 image::14_host-vars.png[host-vars]
 
-These files are YAML respresentations of the data we just saw (with one addition for BGP which we will look at later). The locations of these files will get them loaded into Ansible as part of the inventory.
+These files are YAML representations of the data we just saw (with one addition for BGP which we will look at later). The locations of these files will get them loaded into Ansible as part of the inventory.
 
 You can look at the other files for more examples of other network resources available, and you can also look at the same files under the `rtr2` directory to note the differences.
 
