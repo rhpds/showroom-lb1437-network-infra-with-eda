@@ -3,7 +3,7 @@
 
 Imagine: You're the network engineer on call for a production network that hundreds of users rely on every day. It's 3AM, and a routine router change just broke something important. Your phone won't stop going off.
 
-While you scramble to fix the issue, one thought keeps surfacing: _Wouldn't it be nice to not have to wake up for this kind of thing ever again?_
+In the middle of fixing the issue, you have a thought: _Wouldn't it be nice if this were the last time you ever had to wake up for something like this?_
 
 In this lab, you'll lay the groundwork to make that possible: moving from reactive fixes to proactive, event-driven automation.
 
