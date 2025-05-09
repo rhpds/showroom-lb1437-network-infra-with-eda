@@ -5,7 +5,7 @@ Imagine: You're the network engineer on call for a production network that hundr
 
 In the middle of fixing the issue, you have a thought: _Wouldn't it be nice if this were the last time you ever had to wake up for something like this?_
 
-In this lab, you'll lay the groundwork to replace manual fixes with automated, event-driven responses that reduce downtime and improve consistency.
+In this lab, you'll start building toward that outcome by replacing manual fixes with automated, event-driven responses that reduce downtime and make recovery more consistent.
 
 [#codeserver]
 == Accessing VS Code
