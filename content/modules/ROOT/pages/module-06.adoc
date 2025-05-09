@@ -1,6 +1,6 @@
 = Extend the solution
 
-At this point, we have a functioning Event-Driven Ansible environment, fully capable of monitoring for any kind of network condition detectable via YANG. In this section, we'll apply what we've learned to try to extend our solution for another type of network misconfiguration. This time it will be BGP routing configuration.
+At this point, we have a functioning Event-Driven Ansible environment, fully capable of monitoring for any kind of network condition detectable via YANG. In this section, we'll apply what we've learned to extend our solution for another type of network misconfiguration. This time it will be BGP routing configuration.
 
 [#bgp-yang]
 == YANG prefix and xpath 
