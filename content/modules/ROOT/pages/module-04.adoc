@@ -177,7 +177,9 @@ You will need to wait up to 30 seconds for the next Kafka message to come in, bu
 * The task that applies interface configuration has reported `changed`
 * The playbook has only run against rtr1. Recall from Exercise 2.1 there was an `ansible_eda` variable in the hosts line we were not yet using; now we are. We could also access other event data from within the playbook this way if we needed to.
 
-Press CTRL+C to stop ansible-rulebook. Switch back to your original terminal, which should still have an SSH session open to rtr1. Verify that the interface is up, then exit the SSH session.
+Press CTRL+C to stop ansible-rulebook.
+
+Switch back to your original terminal, which should still have an SSH session open to rtr1. Verify that the interface is up, then exit the SSH session.
 
 [source,role=execute]
 ----

@@ -317,7 +317,9 @@ PLAY RECAP *********************************************************************
 rtr1                       : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
 ----
 
-Notice that the second task of the playbook reported "changed" this time instead of the first. Press CTRL+C to stop running `ansible-rulebook`.
+Notice that the second task of the playbook reported "changed" this time instead of the first.
+
+Press CTRL+C to stop `ansible-rulebook`.
 
 [#bgp-aap]
 == BGP: Event-Driven Ansible in AAP
