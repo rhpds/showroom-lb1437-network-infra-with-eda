@@ -1,3 +1,4 @@
+:page-role: -toc
 = Implement Event-Driven Ansible
 
 With the pieces all in place, and all the information gathered, we can now start to realize the vision of having Ansible autonomously recover from misconfigurations.

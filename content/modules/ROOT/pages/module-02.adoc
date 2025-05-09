@@ -1,3 +1,4 @@
+:page-role: -toc
 = Network configuration with Ansible
 
 It's the next morning, and in our story, the crisis has been averted... but the way you fixed that router wasn't exactly sustainable. Manually copying and pasting configs in the middle of the night? We can do better than that!

@@ -1,3 +1,4 @@
+:page-role: -toc
 = Ansible Automation Platform
 
 With everything built and working on the command line, let's move our workload into Ansible Automation Platform (AAP).

@@ -1,3 +1,4 @@
+:page-role: -toc
 = Getting Started
 
 Imagine: You're the network engineer on call for a production network that hundreds of users rely on every day. It's 3AM, and a routine router change just broke something important. Your phone won't stop going off.

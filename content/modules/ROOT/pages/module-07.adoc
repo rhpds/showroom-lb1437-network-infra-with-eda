@@ -1,3 +1,4 @@
+:page-role: -toc
 = Wrap-up
 
 What started as a fire drill turned into a blueprint for resilient, automated operations.

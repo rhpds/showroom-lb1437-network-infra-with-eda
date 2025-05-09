@@ -1,3 +1,4 @@
+:page-role: -toc
 = Telegraf, Kafka, and YANG
 
 Our goal will be to have our routers self-report when something is wrong, so that Ansible can fix it, as we simulated in the last section.
