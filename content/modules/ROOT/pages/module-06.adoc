@@ -3,7 +3,7 @@
 At this point, we have a functioning Event-Driven Ansible environment, fully capable of monitoring for any kind of network condition detectable via YANG. In this section, we'll apply what we've learned to try to repeat our setup for another type of network misconfiguration. This time it will be BGP routing configuration.
 
 [#bgp-yang]
-== BGP: YANG prefix and xpath 
+== YANG prefix and xpath 
 
 We'll start in your VS Code tab. In the file explorer, under `playbooks`, let's revisit the playbook `yang_info.yml`.
 
@@ -107,7 +107,7 @@ We can see that under `bgp-state-data` is a key called `neighbors`, and under th
 We'll remember the xpath *bgp-state-data/neighbors*.
 
 [#bgp-tele]
-== BGP: Configuring and testing telemetry
+== Configuring and testing telemetry
 
 In your student workbench, under `playbooks`, let's revisit the playbook `configure_ios_telemetry.yml`.
 
@@ -223,7 +223,7 @@ NOTE: As before, the data here matches what can be found in the `Cisco-IOS-XE-bg
 We'll need to choose something in this message to use to detect a bad BGP state. Nested under the `fields` key, there is a `connection/state` key set to `established`. So, let's make a note that our condition for the rulebook, indicating bad status, will be for `fields['connection/state']` to be anything other than "established".
 
 [#bgp-cli]
-== BGP: Event-Driven Ansible on the command line
+== Event-Driven Ansible on the command line
 
 In your student workbench, open the file `rulebooks/routing_status_cli.yml`.
 
@@ -322,7 +322,7 @@ Notice that the second task of the playbook reported "changed" this time instead
 Press CTRL+C to stop `ansible-rulebook`.
 
 [#bgp-aap]
-== BGP: Event-Driven Ansible in AAP
+== Event-Driven Ansible in AAP
 
 Most of the AAP elements are already set up from previous exercises. All we need to do is swap the old rulebook out for the new one.
 
